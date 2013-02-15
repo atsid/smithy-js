@@ -1,0 +1,148 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title></title>
+    <link id="themeStyles" rel="stylesheet" href="../../../target/test-source/lib/dojo-1.8.0/dijit/themes/claro/claro.css">
+    <style type="text/css">html, body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        overflow:hidden;
+    }
+    #borderContainer {
+        width: 100%;
+        height: 100%;
+    }</style>
+    <script>
+        var modules = {
+                    "lib" : "../../../lib",
+                    "ORE" : "../../../lib/ore-js",
+                    "BULLHORN" : "../../../lib/bullhorn-js",
+                    "SCHEMATIC" : "../../../lib/schematic-js",
+                    "SALTMINE" : "../../../lib/saltmine-js",
+                    "TEST" : "../../../../../src/test/page/gadgets",
+                    "TESTDATA" : "../../../../../src/test/data",
+                    "APPSCHEMA" : "../../../../../src/test/page/schema",
+                    "SMITHY" : "../../../../../src/main/javascript/smithy-js"
+                },
+                requires = [];
+
+        dojoConfig = {
+            paths: modules,
+            require: requires,
+            async: true
+        };
+    </script>
+    <script src="../../../target/test-source/lib/dojo-1.8.0/dojo/dojo.js"></script>
+    <script>
+        require([
+            "ORE/AmdResolver",
+            "SMITHY/GadgetSpace",
+            "SMITHY/GadgetArea",
+            "SMITHY/dojoviews/DojoViewFactory",
+            "SMITHY/GadgetFactory",
+            "BULLHORN/ChannelFactory",
+            "SCHEMATIC/ModelFactory",
+            "SALTMINE/ServiceFactory"
+        ], function (
+                AmdResolver,
+                GadgetSpace,
+                GadgetArea,
+                DojoViewFactory,
+                GadgetFactory,
+                ChannelFactory,
+                ModelFactory,
+                ServiceFactory
+        ) {
+            var vfact, gfact, cfact, mfact, sfact, app;
+
+            // simple resolver for factories.
+            function modelToServiceResolver(modelName, path) {
+                var ret;
+                require({async: false}, [path + modelName + "Service"], function (g) {
+                    ret = g;
+                });
+                return ret;
+            };
+
+            // setup factories for gadget space configuration
+            gfact = new GadgetFactory({
+                resolver: new AmdResolver({
+                    path: "TEST/",
+                    synchronous: true
+                }).resolver
+            });
+            // use dojo views rooted at a particular div for the main window
+            vfact = new DojoViewFactory({root: 'gadgetSpace'});
+
+            // setup channel factory to find channels.
+            cfact = new ChannelFactory({
+                resolver: new AmdResolver({
+                    path: "APPSCHEMA/",
+                    synchronous: true
+                }).resolver
+            });
+
+            // setup model factory to find models.
+            mfact = new ModelFactory({
+                resolver: new AmdResolver({
+                    path: "APPSCHEMA/",
+                    synchronous: true
+                }).resolver
+            });
+
+            // setup service factory to find smd schemas.
+            sfact = new ServiceFactory({
+                resolver: new AmdResolver({
+                    path: "APPSCHEMA/",
+                    synchronous: true
+                }).resolver,
+                resolverForModel: function (modelName) {
+                    return modelToServiceResolver(modelName, "APPSCHEMA/");
+                }
+            });
+
+            // instantiate gadget space
+            //"file:///C:/webstorm/modules/smithy-js/src/test/page/GadgetSpaceSample.html"
+            app = new GadgetSpace({
+                gadgetFactory: gfact,
+                viewFactory: vfact,
+                channelFactory: cfact,
+                modelFactory: mfact,
+//                serviceFactory: sfact,
+                extendedWindowConfig: {
+                    url: "ExtendedWindow.html"
+                },
+                useWebStorageForSlag: true
+            });
+
+            app.setSlagData("slag/data", {data: "124"});
+
+            // register gadgets with gadget space.
+            app.addGadget("TitleGadget", {
+                data: {titleText: "Smithy Persistence Sample"}
+            });
+            app.addGadget("ToolBarGadget", {});
+            app.addGadget("TextAreaGadget", {
+                configModel: "APP/schema/TextAreaConfigModel",
+                configId: "cfg-sample-textarea-1"
+            });
+            app.addGadget("SlagGadget", {});
+
+            // load gadgets in the first window
+            app.loadGadgetTo("TitleGadget", "windows[0]/top", true);
+            app.loadGadgetTo("TextAreaGadget", "windows[0]/center/center", true);
+            app.loadGadgetTo("SlagGadget", "windows[0]/center/left", true);
+            app.loadGadgetTo("ToolBarGadget", "windows[0]/center/top", true);
+
+            // render app
+            app.render();
+         });
+    </script>
+
+</head>
+<body class="claro">
+   <div id="gadgetSpace"></div>
+</body>
+</html>

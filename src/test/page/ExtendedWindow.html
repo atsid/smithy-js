@@ -1,0 +1,71 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title></title>
+    <link id="themeStyles" rel="stylesheet" href="../../../target/test-source/lib/dojo-1.8.0/dijit/themes/claro/claro.css">
+    <style type="text/css">html, body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        overflow:hidden;
+    }
+    #borderContainer {
+        width: 100%;
+        height: 100%;
+    }</style>
+    <script>
+        var modules = {
+                    "lib" : "../../../lib",
+                    "ORE" : "../../../lib/ore-js",
+                    "TEST" : "../../../../../src/test/page/gadgets",
+                    "SMITHY" : "../../../../../src/main/javascript/smithy-js"
+                },
+                requires = [];
+
+        dojoConfig = {
+            paths: modules,
+            require: requires,
+            async: true
+        };
+    </script>
+    <script src="../../../target/test-source/lib/dojo-1.8.0/dojo/dojo.js"></script>
+    <script>
+        require([
+            "ORE/AmdResolver",
+            "SMITHY/dojoviews/DojoViewFactory",
+            "SMITHY/GadgetFactory",
+            "SMITHY/SmithyProxy"
+        ], function (
+                AmdResolver,
+                DojoViewFactory,
+                GadgetFactory,
+                SmithyProxy
+                ) {
+
+            var gadgetFactory, viewFactory;
+
+            // setup factories for gadget space configuration
+            gadgetFactory = new GadgetFactory({
+                resolver: new AmdResolver({
+                    path: "TEST/",
+                    synchronous: true
+                }).resolver
+            });
+
+            // dojo views rooted at right div.
+            viewFactory = new DojoViewFactory({root: 'proxyRoot'}),
+            // Add smithy proxy since this is an extended window driven
+            // by another main window.
+            proxy = new SmithyProxy({
+                gadgetFactory: gadgetFactory,
+                viewFactory: viewFactory
+            });
+        });
+    </script>
+
+</head>
+<body class="claro">
+   <div id="proxyRoot"></div>
+</body>
+</html>

@@ -1,0 +1,146 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title></title>
+    <link id="themeStyles" rel="stylesheet" href="../../../target/test-source/lib/dojo-1.8.0/dijit/themes/claro/claro.css">
+    <style type="text/css">html, body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        overflow:hidden;
+    }
+    #borderContainer {
+        width: 100%;
+        height: 100%;
+    }</style>
+    <script>
+        var modules = {
+                    "lib" : "../../../lib",
+                    "ORE" : "../../../lib/ore-js",
+                    "BULLHORN" : "../../../lib/bullhorn-js",
+                    "SCHEMATIC" : "../../../lib/schematic-js",
+                    "TEST" : "../../../../../src/test/page/gadgets",
+                    "TESTDATA" : "../../../../../src/test/data",
+                    "APPSCHEMA" : "../../../../../src/test/page/schema",
+                    "SMITHY" : "../../../../../src/main/javascript/smithy-js"
+                },
+                requires = [];
+
+        dojoConfig = {
+            paths: modules,
+            require: requires,
+            async: true
+        };
+    </script>
+    <script src="../../../target/test-source/lib/dojo-1.8.0/dojo/dojo.js"></script>
+    <script>
+        require([
+            "ORE/AmdResolver",
+            "SMITHY/GadgetSpace",
+            "SMITHY/GadgetArea",
+            "SMITHY/dojoviews/DojoViewFactory",
+            "SMITHY/GadgetFactory",
+            "BULLHORN/ChannelFactory",
+            "SCHEMATIC/ModelFactory"
+        ], function (
+                AmdResolver,
+                GadgetSpace,
+                GadgetArea,
+                DojoViewFactory,
+                GadgetFactory,
+                ChannelFactory,
+                ModelFactory
+        ) {
+            var vfact, gfact, cfact, mfact, layoudata, app;
+
+            // setup factories for gadget space configuration
+            gfact = new GadgetFactory({
+                resolver: new AmdResolver({
+                    path: "TEST/",
+                    synchronous: true
+                }).resolver
+            });
+            // use dojo views rooted at a particular div for the main window
+            vfact = new DojoViewFactory({root: 'gadgetSpace'});
+
+            // setup channel factory to find channels.
+            cfact = new ChannelFactory({
+                resolver: new AmdResolver({
+                    path: "APPSCHEMA/",
+                    synchronous: true
+                }).resolver
+            });
+
+            // setup model factory to find models.
+            mfact = new ModelFactory({
+                resolver: new AmdResolver({
+                    path: "APPSCHEMA/",
+                    synchronous: true
+                }).resolver
+            });
+
+            // instantiate gadget space
+            //"file:///C:/webstorm/modules/smithy-js/src/test/page/GadgetSpaceSample.html"
+            app = new GadgetSpace({
+                gadgetFactory: gfact,
+                viewFactory: vfact,
+                channelFactory: cfact,
+                modelFactory: mfact,
+                extendedWindowConfig: {
+                    url: "ExtendedWindow.html"
+                }
+            });
+
+            // register gadgets with gadget space.
+            app.addGadget("TitleGadget", {
+                data: {applicationTitle: "Smithy serialization Example"}
+            });
+            app.addGadget("ToolBarGadget", {});
+            app.addGadget("TextAreaGadget", {});
+            app.addGadget("WidgetTestGadget", {});
+
+            layoutData = {
+                "address": "/windows[0]",
+                "subAreas": [
+                    {
+                        "address": "/windows[0]/top",
+                        "gadget": {
+                            "name": "TitleGadget"
+                        },
+                        "subAreas": []
+                    },
+                    {
+                        "address": "/windows[0]/center",
+                        "subAreas": [
+                            {
+                                "address": "/windows[0]/center/top",
+                                "gadget": {
+                                    "name": "ToolBarGadget"
+                                },
+                                "subAreas": []
+                            },
+                            {
+                                "address": "/windows[0]/center/center",
+                                "gadget": {
+                                    "name": "TextAreaGadget"
+                                },
+                                "subAreas": []
+                            }
+                        ]
+                    }
+                ]
+            };
+
+            app.realizeLayout(layoutData);
+
+            // render app
+            app.render();
+         });
+    </script>
+
+</head>
+<body class="claro">
+   <div id="gadgetSpace"></div>
+</body>
+</html>
