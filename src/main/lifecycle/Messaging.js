@@ -32,7 +32,7 @@ define([
                 var channel = this.channelFactory.get(channelName, this, "framework");
 
                 this.pub[channelName] = function (message) {
-                    smithycfg.logger.debug("Sending message [" + channelName + "] from gadget", message);
+                    logger.debug("Sending message [" + channelName + "] from gadget", message);
                     channel.publish(message);
                 };
 
@@ -98,7 +98,7 @@ define([
             var channel = this.channelFactory.get(channelName, this);
 
             this.pub[channel.channelName] = function (message) {
-                smithycfg.logger.debug("Sending message [" + channelName + "] from gadget", message);
+                logger.debug("Sending message [" + channelName + "] from gadget", message);
                 channel.publish(message);
             };
 

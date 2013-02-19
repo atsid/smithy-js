@@ -3,7 +3,7 @@
 <html>
 <head>
     <title></title>
-    <link id="themeStyles" rel="stylesheet" href="../../../target/test-source/lib/dojo-1.8.0/dijit/themes/claro/claro.css">
+    <link id="themeStyles" rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dijit/themes/claro/claro.css">
     <style type="text/css">html, body {
         width: 100%;
         height: 100%;
@@ -15,25 +15,14 @@
         height: 100%;
     }</style>
     <script>
-        var modules = {
-                    "lib" : "../../../lib",
-                    "ORE" : "../../../lib/ore-js",
-                    "BULLHORN" : "../../../lib/bullhorn-js",
-                    "SCHEMATIC" : "../../../lib/schematic-js",
-                    "TEST" : "../../../../../src/test/page/gadgets",
-                    "TESTDATA" : "../../../../../src/test/data",
-                    "APPSCHEMA" : "../../../../../src/test/page/schema",
-                    "SMITHY" : "../../../../../src/main/javascript/smithy-js"
-                },
-                requires = [];
-
         dojoConfig = {
-            paths: modules,
-            require: requires,
-            async: true
+            packages: [[
+
+            ]],
+            async: false
         };
     </script>
-    <script src="../../../target/test-source/lib/dojo-1.8.0/dojo/dojo.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojo/dojo.js"></script>">
     <script>
         require([
             "ORE/AmdResolver",

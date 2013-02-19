@@ -33,7 +33,9 @@ define([
             if (!config.features.hasServices) {
                 Object.keys(body).forEach(function (key, idx, arr) {
                     var val = body[key];
-                    if (typeof val === 'function' && body.hasOwnProperty(key)) {
+                    if (typeof val === 'function' &&
+                        body.hasOwnProperty(key) &&
+                        key !== "constructor") {
                         this[key] = function () {};
                     }
                 }, this);
