@@ -1,4 +1,4 @@
-These tests are meant to be run out directly out of this directory once the following dependencies have been placed in the following locations:
+These tests are meant to be run directly out of this directory once the following dependencies have been placed in the following locations:
 
 - The contents of "src/main" from schematic-js (https://github.com/ats/schematic-js.git) should be copied to ./lib/schematic
 - The contents of "src/main" from bullhorn-js (https://github.com/ats/bullhorn-js.git) should be copied to ./lib/bullhorn
