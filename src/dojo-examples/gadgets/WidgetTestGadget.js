@@ -1,9 +1,6 @@
 define([
-    "ORE/lang",
-    "ORE/assert",
-    "ORE/NoAbstractMethodImplError",
-    "ORE/InvalidArgumentError",
-    "SMITHY/Gadget",
+    "smithy/declare",
+    "smithy/Gadget",
     "dijit/layout/BorderContainer",
     "dijit/layout/ContentPane",
     "dijit/Toolbar",
@@ -19,10 +16,7 @@ define([
     "dijit/form/RadioButton",
     "dijit/form/Select"
 ], function (
-    OreLang,
-    Assert,
-    NoAbstractMethodImplError,
-    InvalidArgumentError,
+    declare,
     Gadget,
     BorderContainer,
     ContentPane,
@@ -45,7 +39,7 @@ define([
  * Tests display of various common widgets for styling purposes.
  */
 
-    return OreLang.declare([ContentPane, Gadget], {
+    return declare([ContentPane, Gadget], {
 
         name: "WidgetTestGadget",
 

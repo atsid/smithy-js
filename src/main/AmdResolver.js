@@ -8,7 +8,7 @@ define([
 ], function (
     declare
 ) {
-
+//    require.trace.on = true;
     var module = declare(null, {
         constructor: function (config) {
             var path = config && config.path,
@@ -23,7 +23,10 @@ define([
                 }
                 try {
                     if (dojo) {
-                        require({async: !(synchronous)}, [realPath], function (g) {
+                        require({
+//                            trace: {"loader-inject":1, "loader-define":1},
+                            async: !(synchronous)
+                        }, [realPath], function (g) {
                             ret = g;
                         });
                     } else {

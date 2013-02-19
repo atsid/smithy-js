@@ -3,7 +3,7 @@
 <html>
 <head>
     <title></title>
-    <link id="themeStyles" rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dijit/themes/claro/claro.css">
+    <link id="themeStyles" rel="stylesheet" href="./lib/dojo-1.8.0/dijit/themes/claro/claro.css">
     <style type="text/css">html, body {
         width: 100%;
         height: 100%;
@@ -15,27 +15,26 @@
         height: 100%;
     }</style>
     <script>
-        var modules = {
-                    "lib" : "../../../lib",
-                    "ORE" : "../../../lib/ore-js",
-                    "TEST" : "../../../../../src/test/page/gadgets",
-                    "SMITHY" : "../../../../../src/main/javascript/smithy-js"
-                },
-                requires = [];
-
+        var path = location.pathname.replace(/\/[^/]+$/, '');
         dojoConfig = {
-            paths: modules,
-            require: requires,
-            async: true
+            async: true,
+            paths: {
+                "dijit": path + '/lib/dojo-1.8.0/dijit',
+                "dojo": path + '/lib/dojo-1.8.0/dojo',
+                "smithy": path + '/../main',
+                "bullhorn": path + '/lib/bullhorn',
+                "appschema": path + '/schema',
+                "gadgets": path + '/gadgets'
+            }
         };
     </script>
-    <script src="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojo/dojo.js"></script>">
+    <script src="./lib/dojo-1.8.0/dojo/dojo.js"></script>
     <script>
         require([
-            "ORE/AmdResolver",
-            "SMITHY/dojoviews/DojoViewFactory",
-            "SMITHY/GadgetFactory",
-            "SMITHY/SmithyProxy"
+            "smithy/AmdResolver",
+            "smithy/dojoviews/DojoViewFactory",
+            "smithy/GadgetFactory",
+            "smithy/SmithyProxy"
         ], function (
                 AmdResolver,
                 DojoViewFactory,
@@ -48,13 +47,14 @@
             // setup factories for gadget space configuration
             gadgetFactory = new GadgetFactory({
                 resolver: new AmdResolver({
-                    path: "TEST/",
+                    path: "gadgets/",
                     synchronous: true
                 }).resolver
             });
 
             // dojo views rooted at right div.
-            viewFactory = new DojoViewFactory({root: 'proxyRoot'}),
+            viewFactory = new DojoViewFactory({root: 'proxyRoot'});
+
             // Add smithy proxy since this is an extended window driven
             // by another main window.
             proxy = new SmithyProxy({

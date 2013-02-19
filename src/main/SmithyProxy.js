@@ -23,7 +23,7 @@ define([
             if (util.isUndefined(window.smithyCallback)) {
                 throw new Error("No smithyCallback defined for this window");
             }
-            if (util.isUndefined(window.smithyProxy)) {
+            if (!util.isUndefined(window.smithyProxy)) {
                 throw new Error("There is a smithy proxy already defined for this window.");
             }
             this.gadgetFactory = config.gadgetFactory;

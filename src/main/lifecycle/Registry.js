@@ -35,14 +35,14 @@ define([
             };
 
             this.removeFromRegistry = function (registryLocation, name) {
-                if (util.isDefined(this.getRegistryLocation(registryLocation)[name])) {
+                if (!util.isUndefined(this.getRegistryLocation(registryLocation)[name])) {
                     delete registry[registryLocation][name];
                 }
             };
 
             this.enumerateEntries = function (registryLocation, predicate, scope) {
                 var loc = this.getRegistryLocation(registryLocation);
-                if (util.isDefined(loc)) {
+                if (!util.isUndefined(loc)) {
                     Object.keys(loc).forEach(function (key, idx, obj) {
                         var val = loc[key];
                         predicate.call(scope, val, key, loc);

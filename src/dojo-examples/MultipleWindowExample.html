@@ -3,7 +3,7 @@
 <html>
 <head>
     <title></title>
-    <link id="themeStyles" rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dijit/themes/claro/claro.css">
+    <link id="themeStyles" rel="stylesheet" href="./lib/dojo-1.8.0/dijit/themes/claro/claro.css">
     <style type="text/css">html, body {
         width: 100%;
         height: 100%;
@@ -15,44 +15,44 @@
         height: 100%;
     }</style>
     <script>
+        var path = location.pathname.replace(/\/[^/]+$/, '');
         dojoConfig = {
-            packages: [[
-
-            ]],
-            async: false
+            async: true,
+            paths: {
+                "dijit": path + '/lib/dojo-1.8.0/dijit',
+                "dojo": path + '/lib/dojo-1.8.0/dojo',
+                "smithy": path + '/../main',
+                "bullhorn": path + '/lib/bullhorn',
+                "appschema": path + '/schema',
+                "gadgets": path + '/gadgets'
+            }
         };
     </script>
-    <script src="//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dojo/dojo.js"></script>">
+    <script src="./lib/dojo-1.8.0/dojo/dojo.js"></script>
     <script>
         require([
-            "ORE/AmdResolver",
-            "SMITHY/GadgetSpace",
-            "SMITHY/GadgetArea",
-            "SMITHY/dojoviews/DojoViewFactory",
-            "SMITHY/GadgetFactory",
-            "BULLHORN/ChannelFactory",
-            "SCHEMATIC/ModelFactory"
+            "smithy/AmdResolver",
+            "smithy/GadgetSpace",
+            "smithy/GadgetArea",
+            "smithy/dojoviews/DojoViewFactory",
+            "smithy/GadgetFactory",
+            "bullhorn/ChannelFactory"
         ], function (
                 AmdResolver,
                 GadgetSpace,
                 GadgetArea,
                 DojoViewFactory,
                 GadgetFactory,
-                ChannelFactory,
-                ModelFactory
+                ChannelFactory
         ) {
             var vfact, gfact, cfact, app;
 
             // setup factories for gadget space configuration
             gfact = new GadgetFactory({
                 resolver: new AmdResolver({
-                    path: "TEST/"
-                }).resolver,
-                resolverAsync: function (name, callback, scope) {
-                    require(["TEST/" + name], function (gadget) {
-                        callback.call(scope, gadget);
-                    });
-                }
+                    path: "gadgets/",
+                    synchronous: true
+                }).resolver
             });
             // use dojo views rooted at a particular div for the main window
             vfact = new DojoViewFactory({root: 'gadgetSpace'});
@@ -60,7 +60,8 @@
             // setup channel factory to find channels.
             cfact = new ChannelFactory({
                 resolver: new AmdResolver({
-                    path: "APPSCHEMA/"
+                    path: "appschema/",
+                    synchronous: true
                 }).resolver
             });
 
@@ -70,7 +71,6 @@
                 gadgetFactory: gfact,
                 viewFactory: vfact,
                 channelFactory: cfact,
-                async: true,
                 extendedWindowConfig: {
                     url: "ExtendedWindow.html"
                 }
@@ -83,13 +83,20 @@
             app.addGadget("ToolBarGadget", {});
             app.addGadget("TextAreaGadget", {});
             app.addGadget("WidgetTestGadget", {});
-            app.addGadget("SlagGadget", {});
 
             // load gadgets in the first window
             app.loadGadgetTo("TitleGadget", "windows[0]/top", true);
+            app.loadGadgetTo("WidgetTestGadget", "windows[0]/center/center", true);
+            app.loadGadgetTo("TextAreaGadget", "windows[0]/center/left", true);
+            app.loadGadgetTo("TextAreaGadget", "windows[0]/center/right", true);
             app.loadGadgetTo("ToolBarGadget", "windows[0]/center/top", true);
-            app.loadGadgetTo("WidgetTestGadget", "windows[0]/center/center/tabs[0]", true);
-            app.loadGadgetTo("SlagGadget", "windows[0]/center/center/tabs[1]", true);
+
+            // load gadgets in the second window
+            app.loadGadgetTo("TitleGadget", "windows[1]/top", true);
+            app.loadGadgetTo("TextAreaGadget", "windows[1]/center/center", true);
+            app.loadGadgetTo("TextAreaGadget", "windows[1]/center/left", true);
+            app.loadGadgetTo("TextAreaGadget", "windows[1]/center/right", true);
+            app.loadGadgetTo("ToolBarGadget", "windows[1]/center/top", true);
 
             // render app
             app.render();

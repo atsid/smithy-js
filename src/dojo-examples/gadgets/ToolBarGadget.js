@@ -1,9 +1,6 @@
 define([
-    "ORE/lang",
-    "ORE/assert",
-    "ORE/NoAbstractMethodImplError",
-    "ORE/InvalidArgumentError",
-    "SMITHY/ToolGadget",
+    "smithy/declare",
+    "smithy/ToolGadget",
     "dojo/_base/lang",
     "dijit/layout/ContentPane",
     "dijit/form/Button",
@@ -11,10 +8,7 @@ define([
     "dijit/form/HorizontalSlider",
     "dijit/form/Select"
 ], function (
-    OreLang,
-    Assert,
-    NoAbstractMethodImplError,
-    InvalidArgumentError,
+    declare,
     ToolGadget,
     DojoLang,
     ContentPane,
@@ -29,7 +23,7 @@ define([
  * A tool gadget gadget for test purposes.
  */
 
-    return OreLang.declare([ContentPane, ToolGadget], {
+    return declare([ContentPane, ToolGadget], {
 
         name: "ToolBarGadget",
 

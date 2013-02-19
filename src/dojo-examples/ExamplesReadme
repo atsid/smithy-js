@@ -1,0 +1,8 @@
+These tests are meant to be run out directly out of this directory once the following dependencies have been placed in the following locations:
+
+- The contents of "src/main" from schematic-js (https://github.com/ats/schematic-js.git) should be copied to ./lib/schematic
+- The contents of "src/main" from bullhorn-js (https://github.com/ats/bullhorn-js.git) should be copied to ./lib/bullhorn
+- The dojo, dojox, and dijit directories from a 1.8 dojo distribution (http://dojotoolkit.org/download/) should be copied to ./lib/dojo-1.8.0
+
+The browser should support or be configured to support (i.e. --allow-file-access-from-files for chrome) loading from the file system.
+

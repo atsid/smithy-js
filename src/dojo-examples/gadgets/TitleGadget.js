@@ -1,15 +1,9 @@
 define([
-    "ORE/lang",
-    "ORE/assert",
-    "ORE/NoAbstractMethodImplError",
-    "ORE/InvalidArgumentError",
-    "SMITHY/Gadget",
+    "smithy/declare",
+    "smithy/Gadget",
     "dijit/layout/ContentPane"
 ], function (
-    OreLang,
-    Assert,
-    NoAbstractMethodImplError,
-    InvalidArgumentError,
+    declare,
     Gadget,
     ContentPane
 ) {
@@ -19,7 +13,7 @@ define([
  * A simple Title bar gadget
  */
 
-    return OreLang.declare([ContentPane, Gadget], {
+    return declare([ContentPane, Gadget], {
 
         constructor: function (config) {
             this.ApplicationTitle = (config && config.initData && config.initData.applicationTitle) ||

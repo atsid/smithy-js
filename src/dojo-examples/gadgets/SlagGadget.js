@@ -1,19 +1,13 @@
 define([
-    "ORE/lang",
-    "ORE/assert",
-    "ORE/NoAbstractMethodImplError",
-    "ORE/InvalidArgumentError",
-    "SMITHY/Gadget",
+    "smithy/declare",
+    "smithy/Gadget",
     "dojo/_base/lang",
     "dijit/layout/ContentPane",
     "dijit/form/Button",
     "dijit/form/Textarea",
     "dijit/form/TextBox"
 ], function (
-    OreLang,
-    Assert,
-    NoAbstractMethodImplError,
-    InvalidArgumentError,
+    declare,
     Gadget,
     DojoLang,
     ContentPane,
@@ -27,7 +21,7 @@ define([
  * A simple gadget for test purposes.
  */
 
-    return OreLang.declare([ContentPane, Gadget], {
+    return declare([ContentPane, Gadget], {
 
         constructor: function (config) {
             this.style = "width: 30%";
