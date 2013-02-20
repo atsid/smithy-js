@@ -59,7 +59,8 @@ define([
                 if (!config.factoriesConfigured) {
                     // if not add resolution for smithy channels
                     config.channelFactory.addResolver(new AmdResolver({
-                        path: "smithy/schema/channels/"
+                        path: "smithy/schema/channels/",
+                        synchronous: true
                     }).resolver);
                 }
             }
@@ -88,7 +89,8 @@ define([
                 if (!config.factoriesConfigured) {
                     // if not add resolution for smithy models
                     config.modelFactory.addResolver(new AmdResolver({
-                        path: "smithy/schema/models/"
+                        path: "smithy/schema/models/",
+                        synchronous: true
                     }).resolver);
                 }
                 this.asModel = function (modelName) {

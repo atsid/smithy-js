@@ -8,7 +8,7 @@ define([
 ], function (
     declare
 ) {
-//    require.trace.on = true;
+
     var module = declare(null, {
         constructor: function (config) {
             var path = config && config.path,
@@ -17,17 +17,19 @@ define([
                 synchronous = config && config.synchronous;
 
             this.resolver = function (name, callback) {
-                var ret, realPath = path + name;
+                var ret, realPath = name;
+                if (name.indexOf((altSeparator || "/")) < 0) {
+                    realPath = path + name;
+                }
                 if (altSeparator) {
                     realPath = realPath.replace(new RegExp(altSeparator, "g"), "/");
                 }
                 try {
                     if (dojo) {
                         require({
-//                            trace: {"loader-inject":1, "loader-define":1},
                             async: !(synchronous)
                         }, [realPath], function (g) {
-                            ret = g;
+                                ret = g;
                         });
                     } else {
                         require([realPath], function (g) {
