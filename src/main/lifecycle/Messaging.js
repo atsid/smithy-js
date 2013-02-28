@@ -81,7 +81,7 @@ define([
                 delete this.pub[key];
                 registry.removeFromRegistry(registry.locPublishes, key);
             }, this);
-            Object.keys(subscribes).forEach(function (value, key, obj) {
+            Object.keys(subscribes).forEach(function (key, idx, obj) {
                 var value = subscribes[key];
                 value.unsubscribe(this);
                 registry.removeFromRegistry(registry.locSubscribes, key);

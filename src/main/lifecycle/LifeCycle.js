@@ -35,7 +35,6 @@ define([
             this.statusChange("MESSAGING-UP");
             this.setupServices();
             this.statusChange("SERVICES-UP");
-            //this.setupView(); //view rendering should usually be last. currently, the setupView call is deferred until preference queues return
         },
 
         teardownLifecycle: function () {
