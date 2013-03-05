@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+This is a simple POM file that can run the jsTestDriver unit tests and generate a jar file containing the library
+for publishing in a maven repository. It can be used in the following ways.
+ - "mvn test" will copy necessary files to the target directory and run devjsTestDriver.conf
+ - "mvn install" will add the production of a jar maven artifact containing the library and publish it to your local maven repository
+ - "mvn deploy" will add publishing to a remote maven repository, if you define the repository and have the correct access to it.
+
+ Tests are run against chrome, defined by the browser.executable property, change this property to run against other browsers.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.atsid</groupId>
+	<artifactId>smithy-js</artifactId>
+	<version>0.1.0</version>
+	<packaging>jar</packaging>
+
+	<!-- PROJECT PROPERTIES -->
+	<properties>
+		<jstestdriver.server>localhost</jstestdriver.server>
+		<test.source.output>${project.build.directory}/test-source</test.source.output>
+		<js.output.path>${project.build.directory}/${project.build.finalName}/js</js.output.path>
+		<javascript.source>${basedir}/src/main</javascript.source>
+		<browser.executable>${user.home}\AppData\Local\Google\Chrome\Application\chrome.exe</browser.executable>
+	</properties>
+
+    <distributionManagement>
+        <repository>
+            <id>your-repo</id>
+            <name>Your Repo for remote distribution</name>
+            <url>https://your-repo.host.com/repo</url>
+        </repository>
+    </distributionManagement>
+
+	<pluginRepositories>
+		<pluginRepository>
+			<id>jstd-maven-plugin google code repo</id>
+			<url>http://jstd-maven-plugin.googlecode.com/svn/maven2</url>
+		</pluginRepository>
+	</pluginRepositories>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.googlecode.jstd-maven-plugin</groupId>
+			<artifactId>jstd-maven-plugin</artifactId>
+			<version>1.3.2.5</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<testOutputDirectory>${project.build.directory}/test-source/test</testOutputDirectory>
+		<resources>
+			<resource>
+				<directory>${javascript.source}</directory>
+			</resource>
+		</resources>
+		<testResources>
+			<testResource>
+				<directory>${basedir}/src/test</directory>
+			</testResource>
+			<testResource>
+				<directory>${javascript.source}</directory>
+			</testResource>
+		</testResources>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>2.4</version>
+				<configuration>
+					<classesDirectory>${javascript.source}</classesDirectory>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>com.googlecode.jstd-maven-plugin</groupId>
+				<artifactId>jstd-maven-plugin</artifactId>
+				<version>1.3.2.5</version>
+				<executions>
+					<execution>
+						<id>run-tests</id>
+						<phase>test</phase>
+						<goals>
+							<goal>test</goal>
+						</goals>
+						<configuration>
+							<debug>true</debug>
+							<!-- Defined in <profile> elements below. -->
+							<browser>${browser.executable}</browser>
+							<port>4224</port>
+							<config>${basedir}/devjsTestDriver.conf</config>
+							<testOutput>${project.build.directory}/surefire-reports</testOutput>
+							<basePath>${basedir}</basePath>
+							<jvmOpts>-Xmx1024M</jvmOpts>
+						</configuration>
+					</execution>
+				</executions>
+            </plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>2.2</version>
+				<executions>
+					<execution>
+						<id>unpack-required-js</id>
+						<phase>generate-test-sources</phase>
+						<goals>
+							<goal>unpack-dependencies</goal>
+						</goals>
+						<configuration>
+							<overwrite>false</overwrite>
+							<excludeTransitive>true</excludeTransitive>
+							<outputDirectory>${project.build.directory}/test-source/lib</outputDirectory>
+							<skip>false</skip>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+</project>
