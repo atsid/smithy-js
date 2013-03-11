@@ -3,7 +3,7 @@
 <html>
 <head>
     <title></title>
-    <link id="themeStyles" rel="stylesheet" href="./lib/dojo-1.8.0/dijit/themes/claro/claro.css">
+    <link id="themeStyles" rel="stylesheet" href="./lib/dojo-1.8.3/dijit/themes/claro/claro.css">
     <style type="text/css">html, body {
         width: 100%;
         height: 100%;
@@ -19,55 +19,49 @@
         dojoConfig = {
             async: true,
             paths: {
-                "dijit": path + '/lib/dojo-1.8.0/dijit',
-                "dojo": path + '/lib/dojo-1.8.0/dojo',
+                "application": path,
+                "dijit": path + '/lib/dojo-1.8.3/dijit',
+                "dojo": path + '/lib/dojo-1.8.3/dojo',
                 "smithy": path + '/../main',
+                "schematic": path + '/lib/schematic',
                 "bullhorn": path + '/lib/bullhorn',
-                "appschema": path + '/schema',
+                "appschema": path + '/Schema',
                 "gadgets": path + '/gadgets'
             },
             aliases: [
-                    ["smithy/HashRouter", "dojo/router"]
+                ["smithy/HashRouter", "dojo/router"]
             ]
         };
     </script>
-    <script src="lib/dojo-1.8.0/dojo/dojo.js"></script>
+    <script src="lib/JSONQuery.js"></script>
+    <script src="lib/dojo-1.8.3/dojo/dojo.js"></script>
     <script>
         require([
             "smithy/AmdResolver",
             "smithy/GadgetSpace",
-            "smithy/GadgetArea",
             "smithy/dojoviews/DojoViewFactory",
             "smithy/GadgetFactory",
             "bullhorn/ChannelFactory",
-                "dojo/router"
+            "schematic/ModelFactory",
+            "application/DefaultGadgetSpaceLayout"
         ], function (
                 AmdResolver,
                 GadgetSpace,
-                GadgetArea,
                 DojoViewFactory,
                 GadgetFactory,
                 ChannelFactory,
-                router
-        ) {
-            var vfact, gfact, cfact, app;
-
-            router.register(/[0-9]+/, function () {
-                console.log("Hash changed: " + arguments);
-            });
-            router.startup();
+                ModelFactory,
+                DefaultGadgetSpaceLayout,
+                hashRouter
+                ) {
+            var vfact, gfact, cfact, mfact, layoudata, app;
 
             // setup factories for gadget space configuration
             gfact = new GadgetFactory({
                 resolver: new AmdResolver({
                     path: "gadgets/",
                     synchronous: true
-                }).resolver,
-                resolverAsync: function (name, callback, scope) {
-                    require(["gadgets/" + name], function (gadget) {
-                        callback.call(scope, gadget);
-                    });
-                }
+                }).resolver
             });
             // use dojo views rooted at a particular div for the main window
             vfact = new DojoViewFactory({root: 'gadgetSpace'});
@@ -80,34 +74,33 @@
                 }).resolver
             });
 
+            // setup model factory to find models.
+            mfact = new ModelFactory({
+                resolver: new AmdResolver({
+                    path: "appschema/",
+                    synchronous: true
+                }).resolver
+            });
+
+            window.addEventListener("hashchange", function () {
+                console.log("++++Hash change through direct event.");
+            }, false);
+
             // instantiate gadget space
-            //"file:///C:/webstorm/modules/smithy-js/src/test/page/GadgetSpaceSample.html"
             app = new GadgetSpace({
+                useWebStorageForSlag: true,
+                usePageRouting: "hash",
                 gadgetFactory: gfact,
                 viewFactory: vfact,
                 channelFactory: cfact,
+                modelFactory: mfact,
                 extendedWindowConfig: {
                     url: "ExtendedWindow.html"
                 }
             });
 
-            // register gadgets with gadget space.
-            app.addGadget("TitleGadget", {
-                data: {applicationTitle: "Smithy layout Example"}
-            });
-            app.addGadget("ToolBarGadget", {});
-            app.addGadget("TextAreaGadget", {});
-            app.addGadget("WidgetTestGadget", {});
+            app.realizeWithRouting(DefaultGadgetSpaceLayout);
 
-            // load gadgets in the first window
-            app.loadGadgetTo("TitleGadget", "windows[0]/top", true);
-            app.loadGadgetTo("WidgetTestGadget", "windows[0]/center/center", true);
-            app.loadGadgetTo("TextAreaGadget", "windows[0]/center/left", true);
-            app.loadGadgetTo("TextAreaGadget", "windows[0]/center/right", true);
-            app.loadGadgetTo("ToolBarGadget", "windows[0]/center/top", true);
-
-            // render app
-            app.render();
          });
     </script>
 

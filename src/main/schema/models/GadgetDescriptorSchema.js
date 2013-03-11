@@ -1,22 +1,22 @@
-define([], function () {
-
-    return {
-        "id": "smithy/schema/GadgetDescriptorSchema",
-        "tag": {
-            "resolved": false
+define({
+    "id": "smithy/schema/GadgetDescriptorSchema",
+    "description": "The significant properties on a gadget registry entry",
+    "$schema": "http://json-schema.org/draft-03/schema",
+    "type": "object",
+    "properties": {
+        "name": {
+            type: "string",
+            description: "the name the gadget is registered under.",
+            required: true
         },
-        "description": "The significant properties of a Gadget Descriptor",
-        "$schema": "http://json-schema.org/draft-03/schema",
-        "type": "object",
-        "properties": {
-            "activationChannel": {
-                "type": "string",
-                "description": "The channel name that activates this gadget.",
-            },
-            "name": {
-                "type": "string",
-                "description": "The name of the gadget.",
-            }
+        "gadget": {
+            type: "string",
+            description: "the name of the gadget class to load.",
+            required: true
+        },
+        "data": {
+            type: "any",
+            description: "Static data to pass to the gadget when loading."
         }
-    };
+    }
 });

@@ -13,6 +13,10 @@ define([], function () {
                 "type": "string",
                 "description": "A class name resolvable by a GadgetFactory.",
                 "required": true
+            },
+            "stateData": {
+                "type": "any",
+                "description": "State data that has meaning to gadget."
             }
         }
     };

@@ -311,8 +311,8 @@ define([
 
         /**
          * Get a collection of areas based on the query relative to this area.
-         * @param address
-         * @return a collection of safe areas
+         * @param query
+         * * @return a collection of safe areas
          */
         getAreas: function (query) {
             return jsonQuery(query, this);
@@ -321,6 +321,7 @@ define([
         /**
          * Set the gadget belonging to this area. Will fail if area isn't empty.
          * @param gadget
+         * @param descriptor
          * @return undefined
          */
         setGadget: function (gadget, descriptor) {
@@ -339,6 +340,7 @@ define([
             if (this.gadget) {
                 if (this.view !== this.gadget) {
                     this.view.destroy();
+                    this.view = undefined;
                 } else if (parent) {
                     parent.view.removeChild(this.gadget);
                 }

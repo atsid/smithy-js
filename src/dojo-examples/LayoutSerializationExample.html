@@ -97,39 +97,62 @@
             app.addGadget("TextAreaGadget", {});
             app.addGadget("WidgetTestGadget", {});
 
-            layoutData = {
-                "address": "/windows[0]",
-                "subAreas": [
+            layout = {
+                gadgetRegistry: [
                     {
-                        "address": "/windows[0]/top",
-                        "gadget": {
-                            "name": "TitleGadget"
-                        },
-                        "subAreas": []
+                        name: "TitleGadget",
+                        gadget: "TitleGadget",
+                        data: {
+                            applicationTitle: "Smithy serialization Example"
+                        }
                     },
                     {
-                        "address": "/windows[0]/center",
-                        "subAreas": [
-                            {
-                                "address": "/windows[0]/center/top",
-                                "gadget": {
-                                    "name": "ToolBarGadget"
-                                },
-                                "subAreas": []
-                            },
-                            {
-                                "address": "/windows[0]/center/center",
-                                "gadget": {
-                                    "name": "TextAreaGadget"
-                                },
-                                "subAreas": []
-                            }
-                        ]
+                        name: "ToolBarGadget",
+                        gadget: "ToolBarGadget"
+                    },
+                    {
+                        name: "TextAreaGadget",
+                        gadget: "TextAreaGadget"
+                    },
+                    {
+                        name: "WidgetTestGadget",
+                        gadget: "WidgetTestGadget"
                     }
-                ]
+                ],
+                layoutData: {
+                    "address": "/windows[0]",
+                    "subAreas": [
+                        {
+                            "address": "/windows[0]/top",
+                            "gadget": {
+                                "name": "TitleGadget"
+                            },
+                            "subAreas": []
+                        },
+                        {
+                            "address": "/windows[0]/center",
+                            "subAreas": [
+                                {
+                                    "address": "/windows[0]/center/top",
+                                    "gadget": {
+                                        "name": "ToolBarGadget"
+                                    },
+                                    "subAreas": []
+                                },
+                                {
+                                    "address": "/windows[0]/center/center",
+                                    "gadget": {
+                                        "name": "TextAreaGadget"
+                                    },
+                                    "subAreas": []
+                                }
+                            ]
+                        }
+                    ]
+                }
             };
 
-            app.realizeLayout(layoutData);
+            app.realizeLayout(layout);
 
          });
     </script>

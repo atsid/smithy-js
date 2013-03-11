@@ -20,6 +20,8 @@ define([
                 var ret, realPath = name;
                 if (name.indexOf((altSeparator || "/")) < 0) {
                     realPath = path + name;
+                } else if (name.indexOf(path) < 0) {
+                    return ret;
                 }
                 if (altSeparator) {
                     realPath = realPath.replace(new RegExp(altSeparator, "g"), "/");

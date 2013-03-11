@@ -6,13 +6,13 @@ define([], function () {
             "address": {
                 "type": "string",
                 "description": "address of area.",
-                "optional": false
+                "required": true
             },
             "status": {
                 "type": "string",
                 "description": "Current status of the area.",
                 "enum": ["CREATED", "RENDERED", "DESTROYED"],
-                "optional": false
+                "required": true
             }
         }
     };

@@ -28,7 +28,7 @@ define([
             // create the window.
             var that = this,
                 windowRef = this.config.windowRef,
-                url = this.config.extendedWindowConfig.url || "";
+                url = (this.config.extendedWindowConfig && this.config.extendedWindowConfig.url) || "";
             if (!windowRef.window) {
                 windowRef.window = this.createWindow(url);
                 // set window up to participate

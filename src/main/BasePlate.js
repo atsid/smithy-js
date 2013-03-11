@@ -68,8 +68,9 @@ define([
             // setup channels to publish on if bullhorn is present.
             //
             channels.forEach(function (channelName) {
+                var channelPath = "smithy/schema/channels/" + channelName;
                 if (features.hasMessaging) {
-                    var channel = config.channelFactory.get(channelName, that, "framework");
+                    var channel = config.channelFactory.get(channelPath, that, "framework");
                     that.pub[channelName] = function (message) {
                         logger.debug("Sending message [" + channelName + "] from base plate", message);
                         channel.publish(message);
@@ -113,7 +114,7 @@ define([
             };
 
             this.getSlagData = function (path) {
-                slag.get(path);
+                return slag.get(path);
             };
 
             // setup service support:

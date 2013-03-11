@@ -22,10 +22,10 @@ define([
         name: "TextAreaGadget",
 
         setupMessaging: function () {
-            this.registerSubscriber("DisplayText", function (message) {
+            this.registerSubscriber("appschema/DisplayText", function (message) {
                 this.textArea.set("value", message.text);
             });
-            this.registerPublisher("DisplayText");
+            this.registerPublisher("appschema/DisplayText");
         },
 
         setupView: function () {

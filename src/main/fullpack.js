@@ -12,6 +12,7 @@ define([
     "./schema/models/GadgetAreaSchema",
     "./schema/models/GadgetDescriptorSchema",
     "./schema/models/GadgetSchema",
+    "./schema/models/GadgetSpaceSchema",
     "./ToolGadget"
 ], function () {
 });

@@ -7,7 +7,7 @@ define([], function () {
                 "type": "string",
                 "description": "Current status of the gadget space.",
                 "enum": ["CREATED", "RENDERED", "DESTROYED"],
-                "optional": false
+                "required": true
             }
         }
     };

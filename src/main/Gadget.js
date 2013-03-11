@@ -17,6 +17,7 @@ define([
 
         constructor: function (config) {
             this.config = config;
+            this.stateData = {};
         },
 
         /**

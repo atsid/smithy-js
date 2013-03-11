@@ -18,7 +18,9 @@ define([
     "./lifecycle/Registry",
     "./GadgetArea",
     "./BasePlate",
-    "./GadgetAreaWindow"
+    "./GadgetAreaWindow",
+    "./md5",
+    "./PageRouter"
 ], function (
     declare,
     Util,
@@ -26,7 +28,9 @@ define([
     Registry,
     GadgetArea,
     BasePlate,
-    Window
+    Window,
+    md5,
+    Router
 ) {
     var util = new Util(),
         module = declare([BasePlate, GadgetArea], {
@@ -35,6 +39,10 @@ define([
          * @constructor
          * @param config - configuration object providing:
          *  {
+         *     usePageRouting - "hash" for routing via the hash, "url" for routing via an updated url and falsey for no routing.
+         *                      Page routing involves saving and re-rendering of the GadgetSpace via getSerializedLayout()
+         *                      and realizeLayout() and in the case of "url" routing re-rendering the page as well.
+         *     useWebStorageForSlag - truthy means store slag data in localStorage.
          *     gadgetFactory {SMITHY/GadgetFactory}- a factory for creating gadgets based on a name.
          *     serviceFactory {SALTMINE/ServiceFactory}- a factory for accessing services.
          *     channelFactory {BULLHORN/ChannelFactory}- a factory for creating pubsub channels.
@@ -43,7 +51,7 @@ define([
          *  }
          */
         constructor: function (config) {
-            var newWindow;
+            var newWindow, that = this;
 
             // store config
             this.config = util.mixin({
@@ -52,18 +60,105 @@ define([
             }, config);
             this.registry = new Registry();
 
+            // setup page routing.
+            if (this.config.usePageRouting) {
+                this.router = new Router({
+                    mode: this.config.usePageRouting,
+                    urlPattern: /[0-9a-f][0-9a-f]+$/
+                });
+                this.router.register(/[0-9a-f][0-9a-f]+$/, function (evt) {
+                    that.processStoredLayout(evt.newPath);
+                });
+                this.router.startup();
+            }
+
+            // add properties for serialization
+            Object.defineProperty(this, "gadgetRegistry", {
+                get: function () {
+                    return this.registry.getDescriptorArray(this.registry.locGadgets);
+                },
+                set: function (value) {
+                },
+                enumerable: true
+            });
+            this.layoutData = this;
+
             // create the main window
             this.createMainWindow();
         },
 
+        /**
+         * Retrieve a stored layout for a particular key.
+         * @param key
+         * @return {*}
+         */
+        getStoredLayout: function (key) {
+            return this.getSlagData(key);
+        },
+
+        /**
+         * Saved a layout for a particular key.
+         * @param key - key to store the layout under
+         * @param layout - the layout to store.
+         */
+        saveStoredLayout: function (key, layout) {
+            this.setSlagData(key, layout);
+        },
+
+        /**
+         * Re-render if a layout for the given key is found.
+         * @param key - the key to find the layout.
+         */
+        processStoredLayout: function(key) {
+            var layout = this.getStoredLayout(key);
+            if (layout) {
+                this.realizeLayout(JSON.parse(layout));
+            }
+        },
+
+        /**
+         * If page routing is enabled on the GadgetSpace this method will get a serialized
+         * version of the current layout, take an md5 of it, store the layout
+         * and then route the page to it which will:
+         * - if "hash" was specified, this will cause the hash to be updated with the md5 key which
+         *   will in turn cause the layout to be retrieved and realized within this gadget space.
+         * - if "url" was specified, this will cause the url path to be update with the md5 which will reload the
+         *   page. (using realizeWithRouting() in that page will cause the layout to be retrieved and
+         *   realized).
+         */
+        routePage: function() {
+            var layout, md5Id;
+            if (this.router) {
+                // save layout.
+                layout = this.getSerializedLayout();
+                md5Id = md5(layout);
+                this.saveStoredLayout(md5Id, layout);
+                this.router.go(md5Id);
+            }
+        },
+
+        /**
+         * Publishes a GadgetSpaceStatusChange for this gadget space.
+         * @param status - the status to publish.
+         */
         statusChange: function (status) {
             this.pub.GadgetSpaceStatusChange({status: status});
         },
 
+        /**
+         * Override createSubArea because GadgetSpace always has windows as
+         * sub-areas.
+         * @param config - config for the new Window
+         * @return the new window.
+         */
         createSubArea: function (config) {
             return new Window(config);
         },
 
+        /**
+         * Make sure the primary window (windows[0]) is created with the
+         * current window.
+         */
         createMainWindow: function () {
             // create the main window
             this.config.layoutMode = undefined;
@@ -80,6 +175,7 @@ define([
          * @param name - the name of the gadget resolvable by the factory.
          * @param descriptor - Properties describing how the gadget should behave in the GadgetSpace:
          *  {
+         *     gadget - the gadget to load instead of "name" so a gadget can be registered multiple times with different names.
          *     data - static initialization data in the form understood by the gadget.
          *     configModel - the model used by the gadgets config data.
          *     configId - the id used to retrieve an instance of the config model, by default the gadget name is used
@@ -95,14 +191,16 @@ define([
          * @return undefined
          */
         addGadget: function (name, descriptor, factory) {
-            this.registry.addToRegistry(this.registry.locGadgets, name, util.mixin(
+            var desc = util.mixin(
                 {
                     name: name,
+                    gadget: name,
                     factory: factory || this.config.gadgetFactory
                 },
                 descriptor
-            ));
-            this.pub.GadgetRegistrationEvent({gadget: name, event: "GADGETADDED"});
+            );
+            this.registry.addToRegistry(this.registry.locGadgets, name, desc);
+            this.pub.GadgetRegistrationEvent({gadget: name, descriptor: desc, event: "GADGETADDED"});
         },
 
         /**
@@ -176,7 +274,7 @@ define([
 
         /**
          * Iterate predicate over the registered gadget descriptors. The predicate
-         * takes the descriptor as a predicate.
+         * takes the descriptor as an argument.
          * @param predicate - the predicate to call.
          * @param scope - the scope to call it in.
          * @return undefined
@@ -185,6 +283,43 @@ define([
             this.registry.enumerateEntries(this.registry.locGadgets, function (val, key, obj) {
                 predicate.call(scope, val);
             });
+        },
+
+        /**
+         * Realize a default layout unless page routing dictates that
+         * a stored layout should be used.
+         */
+        realizeWithRouting: function (defaultLayout) {
+            if (this.router && this.router.isDefault()) {
+                this.realizeLayout(defaultLayout);
+            }
+        },
+
+        /**
+         * Override realizeLayout to take a GadgetSpace model, so gadget registration
+         * can be handled first, then the layout by passing up the inheritance chain.
+         * @param gadgetSpace - the gadgetSpace model to realize.
+         * @return undefined
+         */
+        realizeLayout: function (gadgetSpace) {
+            var gadgets = gadgetSpace.gadgetRegistry || [];
+            this.registry.clear(this.registry.locGadgets);
+            gadgets.forEach(function (key, idx, obj) {
+                this.addGadget(obj[idx].name, obj[idx]);
+            }, this);
+            arguments[0] = gadgetSpace.layoutData;
+            this.inherited(arguments);
+        },
+
+        /**
+         * Override to take a GadgetSpace model, so gadget registration
+         * can be handled first, then the layout by passing up the inheritance chain.
+         * @param asObject - get the layout as an object.
+         * @return JSON representation of this gadgetspace.
+         */
+        getSerializedLayout: function (asObject) {
+            var ret = this.asModel("GadgetSpaceSchema");
+            return (asObject ? ret : JSON.stringify(ret));
         },
 
         /**

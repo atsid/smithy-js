@@ -6,7 +6,7 @@ define([], function () {
             "path": {
                 "type": "string",
                 "description": "the path or name of the slag data",
-                "optional": false
+                "required": true
             },
 
             "oldValue": {

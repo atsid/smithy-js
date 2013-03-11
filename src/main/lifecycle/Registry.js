@@ -40,6 +40,18 @@ define([
                 }
             };
 
+            this.clear = function (registryLocation) {
+                registry[registryLocation] = {};
+            };
+
+            this.getDescriptorArray = function (registryLocation) {
+                var ret = [], loc = registry[registryLocation];
+                Object.keys(loc).forEach(function(key, idx, obj) {
+                    ret.push(loc[key]);
+                });
+                return ret;
+            };
+
             this.enumerateEntries = function (registryLocation, predicate, scope) {
                 var loc = this.getRegistryLocation(registryLocation);
                 if (!util.isUndefined(loc)) {

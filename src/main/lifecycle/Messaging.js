@@ -29,7 +29,7 @@ define([
             
             // private method for framework publishing.
             var registerFrameworkPublisher = function (channelName) {
-                var channel = this.channelFactory.get(channelName, this, "framework");
+                var channel = this.channelFactory.get("smithy/schema/channels/" + channelName, this, "framework");
 
                 this.pub[channelName] = function (message) {
                     logger.debug("Sending message [" + channelName + "] from gadget", message);
@@ -129,7 +129,7 @@ define([
          * @param captureSelf
          */
         registerFrameworkSubscriber: function (channelName, callback, filterPredicate, captureSelf) {
-            var channel = this.channelFactory.get(channelName, this, "framework"),
+            var channel = this.channelFactory.get("smithy/schema/channels/" + channelName, this, "framework"),
                 defaultCapture = (typeof (captureSelf) === 'boolean' ? captureSelf : true);
 
             channel.subscribe(callback, filterPredicate, defaultCapture);

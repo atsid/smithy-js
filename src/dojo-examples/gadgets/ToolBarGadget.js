@@ -29,7 +29,7 @@ define([
 
         setupMessaging: function () {
 
-            this.registerPublisher("DisplayText");
+            this.registerPublisher("appschema/DisplayText");
 
             // listen for gadget and gadget area activity.
             this.registerFrameworkSubscriber("GadgetSpaceStatusChange", function (message) {
@@ -89,7 +89,7 @@ define([
                 return message.status === "RENDERED";
             }, false);
 
-            this.registerSubscriber("DisplayText", function (message) {
+            this.registerSubscriber("appschema/DisplayText", function (message) {
                 this.layoutText = message.text;
             }, null, false);
         },
