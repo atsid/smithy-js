@@ -2,7 +2,7 @@
 
 ## Overview
 Smithy-js is an ES5 javascript library for laying out and managing "gadgets" (see below) in an application. It provides several abstractions that help focus development on independent gadgets instead of the machinery necessary to allow them to work in a larger application. These include:
-* An abstraction for an application's visual area (GadgetSpace) that potentially includes multiple wiindows and the hierarchy of display areas (GadgetArea's) within those windows.
+* An abstraction for an application's visual area (GadgetSpace) that potentially includes multiple windows and the hierarchy of display areas (GadgetArea's) within those windows.
 * A gadget "lifecycle" as a set of methods that are called on each gadget to walk it through creation and destruction.
 * A string address scheme for accessing and manipulating GadgetAreas.
 * A registry for gadgets maintained by the GadgetSpace.
