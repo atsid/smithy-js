@@ -42,3 +42,6 @@ The following is a simple code snippet that shows how gadgets can be add and loa
     app.render();
 
 ````
+
+##License
+This software is licensed under the Apache 2.0 license (http://www.apache.org/licenses/LICENSE-2.0).
