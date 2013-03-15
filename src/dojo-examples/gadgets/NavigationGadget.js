@@ -1,22 +1,4 @@
 /*
- require(["dojo/ready", "dijit/layout/AccordionContainer", "dijit/layout/ContentPane"], function(ready, AccordionContainer, ContentPane){
- ready(function(){
- var aContainer = new AccordionContainer({style:"height: 300px"}, "markup");
- aContainer.addChild(new ContentPane({
- title: "This is a content pane",
- content: "Hi!"
- }));
- aContainer.addChild(new ContentPane({
- title:"This is as well",
- content:"Hi how are you?"
- }));
- aContainer.addChild(new ContentPane({
- title:"This too",
- content:"Hello im fine.. thnx"
- }));
- aContainer.startup();
- });
- });
  */
 define([
     "smithy/declare",
@@ -68,7 +50,11 @@ define([
 //                        gs.routePage();
                         // If you are using a custom routing specification do the following
                         // to route to a particular entry.
-                        gs.routeTo(descriptor.name, {applicationTitle: "Loaded From Navigator"});
+                        if (descriptor.gadget === "TitleGadget") {
+                            gs.routeTo(descriptor.name, {applicationTitle: "Loaded From Navigator"});
+                        } else {
+                            gs.routeTo(descriptor.name);
+                        }
                     }
                 }));
             }, this);
