@@ -1,8 +1,26 @@
-These tests are meant to be run directly out of this directory once the following dependencies have been placed in the following locations:
+All examples (except PageRoutingExample) are meant to be run directly out of this directory once the following dependencies have been placed in the following locations:
 
-- The contents of "src/main" from schematic-js (https://github.com/ats/schematic-js.git) should be copied to ./lib/schematic
-- The contents of "src/main" from bullhorn-js (https://github.com/ats/bullhorn-js.git) should be copied to ./lib/bullhorn
+- The contents of "src/main" from schematic-js (https://github.com/atsid/schematic-js.git) should be copied to ./lib/schematic
+- The contents of "src/main" from bullhorn-js (https://github.com/atsid/bullhorn-js.git) should be copied to ./lib/bullhorn
+- The contents of "src/main" from circuits-js (https://github.com/atsid/circuits-js.git) should be copied to ./lib/circuits
 - The dojo, dojox, and dijit directories from a 1.8 dojo distribution (http://dojotoolkit.org/download/) should be copied to ./lib/dojo-1.8.0
 
 The browser should support or be configured to support (i.e. --allow-file-access-from-files for chrome) loading from the file system.
+
+PageRoutingExample uses url extensions to load different layouts for extended urls but the loaded page remains the same.
+This necessitates remapping these extended urls to the same html page which is difficult with the file protocol. One way of running the example
+is to use an Apache 2.2. server, that has the smithy-js/src symbolically linked to <apache>/htdocs/smithy-project and has the following added
+to its httpd.conf:
+
+RewriteEngine On
+
+RewriteRule ^/smithy-project/PageRoutingExample/main/(.*)$ /smithy-project/main/$1 [PT]
+RewriteRule ^/smithy-project/PageRoutingExample/lib/(.*)$ /smithy-project/dojo-examples/lib/$1 [PT]
+RewriteRule ^/smithy-project/PageRoutingExample/data/(.*)$ /smithy-project/dojo-examples/data/$1 [PT]
+RewriteRule ^/smithy-project/PageRoutingExample/gadgets/(.*)$ /smithy-project/dojo-examples/gadgets/$1 [PT]
+RewriteRule ^/smithy-project/PageRoutingExample(.*)$ /smithy-project/dojo-examples/PageRoutingExample.html [PT]
+RewriteRule ^/smithy-project/schema/(.*)$ /smithy-project/main/schema/$1 [PT]
+RewriteRule ^/smithy-project/main/(.*)$ /smithy-project/main/$1 [PT]
+RewriteRule ^/smithy-project/(.*)$ /smithy-project/dojo-examples/$1 [PT]
+RewriteRule ^/main/(.*)$ /smithy-project/main/$1 [PT]
 

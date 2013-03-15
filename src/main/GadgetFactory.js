@@ -2,9 +2,9 @@
  * @class SMITHY/GadgetFactory
  * Contains methods for resolving and creating gadgets.
  * @cfg {
-     *     resolver: function(gadgetName) returning Gadget Class.
-     *     resolverAsync: function(gadgetName, callback, scope)
-     * }
+ *     resolver: function(gadgetName) returning Gadget Class.
+ *     resolverAsync: function(gadgetName, callback, scope)
+ * }
  */
 define([
     "./declare"

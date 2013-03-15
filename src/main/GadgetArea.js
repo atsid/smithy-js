@@ -374,10 +374,14 @@ define([
          */
         loadGadget: function (descriptor, gadgetSpace) {
             var gadget, that = this,
+                initData = util.mixin(
+                    util.mixin({}, descriptor.data),
+                    this.config.gadgetSpace.lastRouteParams || {}
+                ),
                 gConfig = util.mixin(
                     {
                         gadgetSpace: gadgetSpace,
-                        initData: descriptor.data
+                        initData: initData
                     },
                     that.config
                 ),

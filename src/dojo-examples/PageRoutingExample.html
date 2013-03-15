@@ -3,7 +3,7 @@
 <html>
 <head>
     <title></title>
-    <link id="themeStyles" rel="stylesheet" href="./lib/dojo-1.8.3/dijit/themes/claro/claro.css">
+    <link id="themeStyles" rel="stylesheet" href="/smithy-project/PageRoutingExample/lib/dojo-1.8.3/dijit/themes/claro/claro.css">
     <style type="text/css">html, body {
         width: 100%;
         height: 100%;
@@ -15,7 +15,8 @@
         height: 100%;
     }</style>
     <script>
-        var path = location.pathname.replace(/\/[^/]+$/, '');
+        //var path = location.pathname.replace(/\/[^/]+$/, '');
+        var path = "/smithy-project/PageRoutingExample";
         dojoConfig = {
             async: true,
             paths: {
@@ -33,28 +34,29 @@
             ]
         };
     </script>
-    <script src="lib/JSONQuery.js"></script>
-    <script src="lib/dojo-1.8.3/dojo/dojo.js"></script>
+    <!--
+    Note that smithy/PageRoutingGadgetSpace is used instead of smithy/GadgetSpace to provide
+      the page routing functionality.
+    -->
+    <script src="/smithy-project/PageRoutingExample/lib/JSONQuery.js"></script>
+    <script src="/smithy-project/PageRoutingExample/lib/dojo-1.8.3/dojo/dojo.js"></script>
     <script>
         require([
             "smithy/AmdResolver",
-            "smithy/GadgetSpace",
+            "smithy/PageRoutingGadgetSpace",
             "smithy/dojoviews/DojoViewFactory",
             "smithy/GadgetFactory",
             "bullhorn/ChannelFactory",
-            "schematic/ModelFactory",
-            "application/DefaultGadgetSpaceLayout"
+            "schematic/ModelFactory"
         ], function (
                 AmdResolver,
                 GadgetSpace,
                 DojoViewFactory,
                 GadgetFactory,
                 ChannelFactory,
-                ModelFactory,
-                DefaultGadgetSpaceLayout,
-                hashRouter
+                ModelFactory
                 ) {
-            var vfact, gfact, cfact, mfact, layoudata, app;
+            var vfact, gfact, cfact, mfact, layoudata, app, routingSpec;
 
             // setup factories for gadget space configuration
             gfact = new GadgetFactory({
@@ -82,24 +84,50 @@
                 }).resolver
             });
 
-            window.addEventListener("hashchange", function () {
-                console.log("++++Hash change through direct event.");
-            }, false);
+            // A specification mapping url patterns to
+            // layouts.
+            routingSpec = {
+                // the application path all route urls
+                // are relative to.
+                rootPattern: /^.*PageRoutingExample\/?/,
+                routes: {
+                    "default": {
+                        id: "application/data/default",
+                        url: ""
+                    },
+                    "error": {
+                        id: "application/data/error"
+                    },
+                    "TitleGadget": {
+                        id: "application/data/titlegadget",
+                        url: "titlegadget/{applicationTitle}"
+                    },
+                    "NavigationGadget": {
+                        id: "application/data/navigationgadget",
+                        url: "navigationgadget"
+                    },
+                    "WidgetTestGadget": {
+                        id: "application/data/widgettestgadget",
+                        url: "widgettestgadget"
+                    }
+                }
+            };
 
             // instantiate gadget space
             app = new GadgetSpace({
-                useWebStorageForSlag: true,
-                usePageRouting: "hash",
                 gadgetFactory: gfact,
                 viewFactory: vfact,
                 channelFactory: cfact,
                 modelFactory: mfact,
+                usePageRouting: "url",
+                routingSpecification: routingSpec,
                 extendedWindowConfig: {
                     url: "ExtendedWindow.html"
-                }
+                },
+                useWebStorageForSlag: true
             });
 
-            app.realizeWithRouting(DefaultGadgetSpaceLayout);
+            app.realizeLayout();
 
          });
     </script>

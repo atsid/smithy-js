@@ -1,15 +1,14 @@
 /**
  * @class SMITHY/GadgetSpace
  * A GadgetSpace provides an abstraction for:
- *  1. A user-interface surface composed of multiple trees of
- *    GadgetArea's with the root GadgetArea of each tree housed in a separate
- *    browser window controlled by the GadgetSpace.
+ *  1. An abstraction for an application's visual area that potentially includes multiple windows
+ *     and the hierarchy of display areas (GadgetArea's) within those windows.
  *  2. Methods for managing GadgetAreas in the GadgetSpace via a string address
  *     related to their position. (e.g. /window[1]/row[0]/column[0]/left).
  *  3. A container for Gadget types managed by the GadgetSpace. Gadget types are registered
  *    with the GadgetSpace, and instances of the Gadgets are created and their life-cycles and
  *    environment are controlled by the GadgetSpace.
- *  4. Provide a gadget data repository.
+ *  4. A global gadget data repository.
  */
 define([
     "./declare",
@@ -18,9 +17,7 @@ define([
     "./lifecycle/Registry",
     "./GadgetArea",
     "./BasePlate",
-    "./GadgetAreaWindow",
-    "./md5",
-    "./PageRouter"
+    "./GadgetAreaWindow"
 ], function (
     declare,
     Util,
@@ -28,9 +25,7 @@ define([
     Registry,
     GadgetArea,
     BasePlate,
-    Window,
-    md5,
-    Router
+    Window
 ) {
     var util = new Util(),
         module = declare([BasePlate, GadgetArea], {
@@ -39,15 +34,12 @@ define([
          * @constructor
          * @param config - configuration object providing:
          *  {
-         *     usePageRouting - "hash" for routing via the hash, "url" for routing via an updated url and falsey for no routing.
-         *                      Page routing involves saving and re-rendering of the GadgetSpace via getSerializedLayout()
-         *                      and realizeLayout() and in the case of "url" routing re-rendering the page as well.
          *     useWebStorageForSlag - truthy means store slag data in localStorage.
          *     gadgetFactory {SMITHY/GadgetFactory}- a factory for creating gadgets based on a name.
          *     serviceFactory {SALTMINE/ServiceFactory}- a factory for accessing services.
          *     channelFactory {BULLHORN/ChannelFactory}- a factory for creating pubsub channels.
          *     modelFactory {SCHEMATIC/ModelFactory}- a factory for creating model objects.
-         *     viewFactory - a factory for creating view objects
+         *     viewFactory - a factory for creating view objects.
          *  }
          */
         constructor: function (config) {
@@ -59,18 +51,6 @@ define([
                 gadgetSpace: this
             }, config);
             this.registry = new Registry();
-
-            // setup page routing.
-            if (this.config.usePageRouting) {
-                this.router = new Router({
-                    mode: this.config.usePageRouting,
-                    urlPattern: /[0-9a-f][0-9a-f]+$/
-                });
-                this.router.register(/[0-9a-f][0-9a-f]+$/, function (evt) {
-                    that.processStoredLayout(evt.newPath);
-                });
-                this.router.startup();
-            }
 
             // add properties for serialization
             Object.defineProperty(this, "gadgetRegistry", {
@@ -85,56 +65,6 @@ define([
 
             // create the main window
             this.createMainWindow();
-        },
-
-        /**
-         * Retrieve a stored layout for a particular key.
-         * @param key
-         * @return {*}
-         */
-        getStoredLayout: function (key) {
-            return this.getSlagData(key);
-        },
-
-        /**
-         * Saved a layout for a particular key.
-         * @param key - key to store the layout under
-         * @param layout - the layout to store.
-         */
-        saveStoredLayout: function (key, layout) {
-            this.setSlagData(key, layout);
-        },
-
-        /**
-         * Re-render if a layout for the given key is found.
-         * @param key - the key to find the layout.
-         */
-        processStoredLayout: function(key) {
-            var layout = this.getStoredLayout(key);
-            if (layout) {
-                this.realizeLayout(JSON.parse(layout));
-            }
-        },
-
-        /**
-         * If page routing is enabled on the GadgetSpace this method will get a serialized
-         * version of the current layout, take an md5 of it, store the layout
-         * and then route the page to it which will:
-         * - if "hash" was specified, this will cause the hash to be updated with the md5 key which
-         *   will in turn cause the layout to be retrieved and realized within this gadget space.
-         * - if "url" was specified, this will cause the url path to be update with the md5 which will reload the
-         *   page. (using realizeWithRouting() in that page will cause the layout to be retrieved and
-         *   realized).
-         */
-        routePage: function() {
-            var layout, md5Id;
-            if (this.router) {
-                // save layout.
-                layout = this.getSerializedLayout();
-                md5Id = md5(layout);
-                this.saveStoredLayout(md5Id, layout);
-                this.router.go(md5Id);
-            }
         },
 
         /**
@@ -283,16 +213,6 @@ define([
             this.registry.enumerateEntries(this.registry.locGadgets, function (val, key, obj) {
                 predicate.call(scope, val);
             });
-        },
-
-        /**
-         * Realize a default layout unless page routing dictates that
-         * a stored layout should be used.
-         */
-        realizeWithRouting: function (defaultLayout) {
-            if (this.router && this.router.isDefault()) {
-                this.realizeLayout(defaultLayout);
-            }
         },
 
         /**

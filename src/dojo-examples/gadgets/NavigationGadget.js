@@ -42,7 +42,7 @@ define([
     return declare([AccordionContainer, ToolGadget], {
 
         constructor: function (config) {
-            this.style = "width: 20%";
+            this.style = "width: 30%";
         },
 
         name: "NavigationGadget",
@@ -61,10 +61,14 @@ define([
                 loadGadgets.addChild(new Button({
                     label: "Load " + descriptor.name,
                     onClick: function () {
-                        var center = gs.getArea("/windows[0]/center");
-                        center.removeGadget();
-                        center = gs.loadGadgetTo(descriptor.name, "/windows[0]/center", false);
-                        gs.routePage();
+                        // If you want to do adhoc routing do the following.
+//                        var center = gs.getArea("/windows[0]/center");
+//                        center.removeGadget();
+//                        center = gs.loadGadgetTo(descriptor.name, "/windows[0]/center", false);
+//                        gs.routePage();
+                        // If you are using a custom routing specification do the following
+                        // to route to a particular entry.
+                        gs.routeTo(descriptor.name, {applicationTitle: "Loaded From Navigator"});
                     }
                 }));
             }, this);
