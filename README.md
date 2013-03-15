@@ -9,6 +9,7 @@ Smithy-js is an ES5 javascript library for laying out and managing "gadgets" (se
 * A topic-based messaging bus for communication among gadgets (provided by bullhorn-js).
 * Access to services from Gadgets (provided by circuits-js).
 * Access to models from Gadgets (provided by schematic-js).
+* Support for mapping gadget layouts to human readable url's.
 
 ## Gadgets
 Gadgets are a modular unit of user interface functionality. They can be thought of as a self-contained interaction component that accomplishes some aspect of the application’s functionality. The intention of segmenting functionality into these independent user interface components is that they can then be re-used as building blocks for larger aggregations of application functionality or custom workflows.
