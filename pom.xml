@@ -41,6 +41,13 @@ for publishing in a maven repository. It can be used in the following ways.
 		</pluginRepository>
 	</pluginRepositories>
 
+    <repositories>
+        <repository>
+            <id>jstd-maven-plugin google code repo</id>
+            <url>http://jstd-maven-plugin.googlecode.com/svn/maven2</url>
+        </repository>
+    </repositories>
+
 	<dependencies>
 		<dependency>
 			<groupId>com.googlecode.jstd-maven-plugin</groupId>
