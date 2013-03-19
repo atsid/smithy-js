@@ -4,7 +4,8 @@
         paths: {
             smithy: "main",
             external: "test/javascript/third-party",
-            Test: "test/javascript"
+            Test: "test/javascript",
+            data: "test/data"
         }
     });
 }());

@@ -48,7 +48,7 @@ define([
          *  }
          */
         constructor: function (config) {
-            var that = this, routingSpec = config.routingSpecification;
+            var that = this, routingSpec = config && config.routingSpecification;
 
             this.lastRouteParams = {};
 
@@ -56,7 +56,14 @@ define([
             if (this.config.usePageRouting) {
                 this.router = new Router({
                     mode: this.config.usePageRouting,
-                    rootPattern: (routingSpec && routingSpec.rootPattern) || /.*/
+                    rootPattern: (routingSpec && routingSpec.rootPattern) || /.*/,
+                    noMatch: function (loc) {
+                        var errorRoute = routingSpec && routingSpec.routes["error"];
+                        if (errorRoute) {
+                            that.lastRouteParams = that.processRouteParams(loc, errorRoute);
+                            that.processStoredLayout(loc, errorRoute);
+                        }
+                    }
                 });
                 // if there's a routing spec then use it
                 if (routingSpec) {
@@ -65,15 +72,15 @@ define([
                             rgx;
                         if (key !== "error") {
                             rgx = val.url.replace(/\{.*\}/, "(.*)") || "^$";
-                            that.router.register(new RegExp(rgx), function (evt) {
-                                that.lastRouteParams = that.processRouteParams(evt, val);
-                                that.processStoredLayout(evt, val);
+                            that.router.register(new RegExp(rgx), function (loc) {
+                                that.lastRouteParams = that.processRouteParams(loc, val);
+                                that.processStoredLayout(loc, val);
                             })
                         }
                     });
                 } else { // register default pattern for adhoc routing.
-                    this.router.register(/[0-9a-f][0-9a-f]+$/, function (evt) {
-                        that.processStoredLayout(evt);
+                    this.router.register(/[0-9a-f][0-9a-f]+$/, function (loc) {
+                        that.processStoredLayout(loc);
                     });
                 }
                 this.router.startup();
@@ -133,9 +140,9 @@ define([
         processRouteParams: function (location, route) {
             var ret,
                 qparams = (location.search && location.search.substring(1).split("&")) || [],
-                params = route.url.match(/{(.*?)}/g) || [],
+                params = (route.url && route.url.match(/{(.*?)}/g)) || [],
                 values = location.pathname.match(
-                    route.url.replace(/{.*?}/g, "(.*)")
+                    (route.url && route.url.replace(/{.*?}/g, "(.*)")) || []
                 ).splice(1);
             params.forEach(function (key, idx, obj) {
                 ret = ret || {};
