@@ -398,7 +398,7 @@ define([
             if (!that.config.async) {
                 createGadget = function () {
                     gadget = that.getGadgetFactory().getGadget(
-                        descriptor.name,
+                        descriptor.gadget,
                         gConfig
                     );
                     setupGadget(gadget);
@@ -406,7 +406,7 @@ define([
             } else {
                 createGadget = function () {
                     gadget = that.getGadgetFactory().getGadgetAsync(
-                        descriptor.name,
+                        descriptor.gadget,
                         gConfig,
                         setupGadget,
                         that
