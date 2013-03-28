@@ -306,7 +306,7 @@ define([
                 query = "." + query;
             }
             ret = this.getAreas(query);
-            return ret.length ? ret[0] : ret;
+            return (ret && ret.length) ? ret[0] : ret;
         },
 
         /**
@@ -340,12 +340,12 @@ define([
             if (this.gadget) {
                 if (this.view !== this.gadget) {
                     this.view.destroy();
-                    this.view = undefined;
                 } else if (parent) {
                     parent.view.removeChild(this.gadget);
                 }
                 this.gadget.destroy();
                 this.gadget = undefined;
+                this.view = undefined
             }
         },
 
@@ -370,12 +370,15 @@ define([
          * necessary to load model data and handle asynchronous gadget creation.
          * @param descriptor the registered gadget descriptor
          * @param gadgetSpace the gadget space requesting the load.
+         * @param data additionalData to pass to gadget
          * @return undefined
          */
-        loadGadget: function (descriptor, gadgetSpace) {
+        loadGadget: function (descriptor, gadgetSpace, data) {
             var gadget, that = this,
                 initData = util.mixin(
-                    util.mixin({}, descriptor.data),
+                    util.mixin(
+                        util.mixin({}, descriptor.data),
+                        data),
                     this.config.gadgetSpace.lastRouteParams || {}
                 ),
                 gConfig = util.mixin(

@@ -163,12 +163,13 @@ define([
          * @param areaAddress - the target area for the gadget.
          * @param createIntermediateAreas - create intermediate areas if they don't exist otherwise fail.
          *      default is false.
+         * @param initData - additional data to mixin to gadgets init data.
          * @return safe version of the area containing the gadget.
          */
-        loadGadgetTo: function (gadgetName, areaAddress, createIntermediateAreas) {
+        loadGadgetTo: function (gadgetName, areaAddress, createIntermediateAreas, initData) {
             var gadget = this.registry.getRegistryItem(this.registry.locGadgets, gadgetName),
                 area = this.addArea(areaAddress, createIntermediateAreas);
-            area.loadGadget(gadget, this);
+            area.loadGadget(gadget, this, initData);
             return area;
         },
 
