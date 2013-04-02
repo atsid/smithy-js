@@ -338,7 +338,7 @@ define([
         removeGadget: function () {
             var parent = this.config.parent;
             if (this.gadget) {
-                if (this.view !== this.gadget) {
+                if (this.view !== this.gadget && this.view) {
                     this.view.destroy();
                 } else if (parent) {
                     parent.view.removeChild(this.gadget);
