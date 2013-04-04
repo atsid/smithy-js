@@ -73,7 +73,7 @@ define([
          * so you can call it easily, such as this.CaseService.readCase({args}, {plugins/callbacks});
          */
         registerService: function (serviceName, plugins) {
-            var service = this.serviceFactory.getService(serviceName, plugins);
+            var service = this.serviceFactory.getServiceByName(serviceName, plugins);
             this[service.name] = service;
             this.registry.addToRegistry(this.registry.locServices, service.name, service);
             return service;
