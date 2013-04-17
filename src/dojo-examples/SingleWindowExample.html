@@ -4,6 +4,7 @@
 <head>
     <title></title>
     <link id="themeStyles" rel="stylesheet" href="./lib/dojo-1.8.0/dijit/themes/claro/claro.css">
+    <link id="themeStyles" rel="stylesheet" href="../main/dojoviews/css/layout-container.css">
     <style type="text/css">html, body {
         width: 100%;
         height: 100%;
@@ -14,6 +15,7 @@
         width: 100%;
         height: 100%;
     }</style>
+    <script src="lib/JSONQuery.js"></script>
     <script>
         var path = location.pathname.replace(/\/[^/]+$/, '');
         dojoConfig = {
@@ -101,10 +103,11 @@
 
             // load gadgets in the first window
             app.loadGadgetTo("TitleGadget", "windows[0]/top", true);
-            app.loadGadgetTo("WidgetTestGadget", "windows[0]/center/center", true);
-            app.loadGadgetTo("TextAreaGadget", "windows[0]/center/left", true);
-            app.loadGadgetTo("TextAreaGadget", "windows[0]/center/right", true);
-            app.loadGadgetTo("ToolBarGadget", "windows[0]/center/top", true);
+            app.loadGadgetTo("WidgetTestGadget", "windows[0]/center/columns[0]", true);
+//            app.loadGadgetTo("WidgetTestGadget", "windows[0]/center/center", true);
+//            app.loadGadgetTo("TextAreaGadget", "windows[0]/center/left", true);
+//            app.loadGadgetTo("TextAreaGadget", "windows[0]/center/right", true);
+            app.loadGadgetTo("ToolBarGadget", "windows[0]/top", true);
 
             // render app
             app.render();

@@ -6,13 +6,15 @@ define([
     "dojo/dom",
     "dojo/_base/window",
     "./DojoBorderView",
-    "./DojoTabView"
+    "./DojoTabView",
+    "./DojoArrayView"
 ], function (
     declare,
     Dom,
     DojoWindow,
     BorderContainer,
-    TabContainer
+    TabContainer,
+    ArrayView
 ) {
     var module = declare(null, {
         constructor: function (config) {
@@ -34,6 +36,10 @@ define([
             } else if (mode === "tabs") {
                 view = new TabContainer({
                     style: "height:100%; width:100%"
+                }, tag);
+            } else if (mode === "rows" || mode === "columns") {
+                view = new ArrayView({
+                    mode: mode
                 }, tag);
             }
             return view;

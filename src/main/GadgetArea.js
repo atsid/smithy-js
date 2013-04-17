@@ -272,7 +272,7 @@ define([
          * @return the removed area
          */
         removeSubArea: function (area) {
-            util.some(this.subAreas, function (obj, idx) {
+            this.subAreas.some(function (obj, idx) {
                 if (obj === area) {
                     this.removeSubAreaAtIndex(obj, idx);
                 }
