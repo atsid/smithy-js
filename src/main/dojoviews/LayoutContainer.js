@@ -1433,26 +1433,26 @@ define([
         /**
          * Event when widget is in DOM and initial areas have been created, and possibly any
          * initial children have been added.
-         * @param {PTO.widget.LayoutContainer} me
+         * @param {LayoutContainer} me
          */
         onStartup: function (me) {},
 
         /**
          * Event when this LayoutContainer is destroyed.
-         * @param {PTO.widget.LayoutContainer} me
+         * @param {LayoutContainer} me
          */
         onDestroy: function (me) {},
 
         /**
          * Event when a new area node is created. Area node will be in the DOM.
-         * @param {PTO.widget.LayoutContainer} me
+         * @param {LayoutContainer} me
          * @param {HTMLElement} areaNode Area node that was created.
          */
         onAddArea: function (me, areaNode) {},
 
         /**
          * Event when an area node is removed. Area node will not be in the DOM any more.
-         * @param {PTO.widget.LayoutContainer} me
+         * @param {LayoutContainer} me
          * @param {HTMLElement} areaNode Area node that was removed.
          */
         onRemoveArea: function (me, areaNode) {},
@@ -1461,7 +1461,7 @@ define([
          * Event when a child is added to an area. Child node will
          * be in the DOM. Event not fired if area already contained
          * a child when addChild was called.
-         * @param {PTO.widget.LayoutContainer} me
+         * @param {LayoutContainer} me
          * @param {HTMLElement} areaNode Area node that contains the child.
          * @param {dijit._WidgetBase | HTMLElement} childWidgetOrNode Widget or node passed by caller to addChild
          */
@@ -1470,7 +1470,7 @@ define([
         /**
          * Event when a child is removed from an area. Area node will be in the DOM,
          * but the child node will not be in the DOM.
-         * @param {PTO.widget.LayoutContainer} me
+         * @param {LayoutContainer} me
          * @param {HTMLElement} areaNode Area node that previously contained the child.
          * @param {dijit._WidgetBase | HTMLElement} childWidgetOrNode Widget or node passed by caller to removeChild
          */
@@ -1478,7 +1478,7 @@ define([
 
         /**
          * Event when a child is added or removed.
-         * @param {PTO.widget.LayoutContainer} me
+         * @param {LayoutContainer} me
          * @param {HTMLElement} area Area node that child was added
          * @param {dijit._Widget | HTMLElement} child Only included when a child is added.
          */
@@ -1488,7 +1488,7 @@ define([
          * Event when a child (widget or node) in an area is resized. If the child
          * is a widget and the widget has a resize method, the resize method
          * has already been called.
-         * @param {PTO.widget.LayoutContainer} me this instance
+         * @param {LayoutContainer} me this instance
          * @param {HTMLElement} area Area node that was resized
          * @param {dijit._WidgetBase | HTMLElement} child Child widget or node
          */
@@ -1496,7 +1496,7 @@ define([
 
         /**
          * Resize event when area is resized.
-         * @param {PTO.widget.LayoutContainer} me this instance
+         * @param {LayoutContainer} me this instance
          * @param {HTMLElement} area Area node that was resized
          */
         onResizeArea: function (me, area) {}
