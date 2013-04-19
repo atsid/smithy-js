@@ -34,7 +34,8 @@ define([
          * @constructor
          * @param config - configuration object providing:
          *  {
-         *     useWebStorageForSlag - truthy means store slag data in localStorage.
+         *     useWebStorageForSlag - truthy means store slag data in WebStorage localStorage by default,
+         *                            "session" means use session storage.
          *     gadgetFactory {SMITHY/GadgetFactory}- a factory for creating gadgets based on a name.
          *     serviceFactory {SALTMINE/ServiceFactory}- a factory for accessing services.
          *     channelFactory {BULLHORN/ChannelFactory}- a factory for creating pubsub channels.

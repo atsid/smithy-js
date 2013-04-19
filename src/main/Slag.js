@@ -1,11 +1,12 @@
 /**
  * @class SMITHY/Slag
- * Smithy framework element that acts a general data repository using web storage if
+ * Smithy framework element that acts as a general data repository using web storage if
  * requested and available.
  * config {
      *    changeEvent - {function} function accepting a single object of form :
      *        (path: pathToTheData, oldValue: OldValue, newValue: NewValue).
-     *    useWebStorage - true if you want the data stored in local storage instead of on this object.
+     *    useWebStorage - truthy if you want the data stored in web storage instead of on this object,
+     *                    "session" if all data should be stored in session storage.
      * }
  */
 define([
@@ -24,7 +25,8 @@ define([
         constructor: function (config) {
             var that = this;
 
-            this.changeEvent = config.changeEvent || function () {};
+            this.config = config;
+            this.changeEvent = (config && config.changeEvent) || function () {};
 
             if (config.useWebStorage) {
                 this.storage = new WebStorage({namespace: "SmithySlag"});
@@ -41,7 +43,7 @@ define([
                         that.storage.setLocalObject(key, value);
                     },
                     getSessionObject: function (key) {
-                        that.storage.getLocalObject(key);
+                        return that.storage.getLocalObject(key);
                     }
                 };
             }
@@ -53,17 +55,28 @@ define([
          * @return the requested data.
          */
         get: function (path) {
-            return this.storage.getLocalObject(path);
+            var ret = this.storage.getLocalObject(path) ||
+                this.storage.getSessionObject(path);
+            return ret;
         },
 
         /**
-         * Set the data an fire a change notification.
+         * Set the data and fire a change notification.
          * @param path - the path to the data
          * @param value - the new value
+         * @param options - object like {session: true|false}
          */
-        set: function (path, value) {
-            var oldValue = this.storage.getLocalObject(path);
-            this.storage.setLocalObject(path, value);
+        set: function (path, value, options) {
+            var oldValue,
+                useSession = (options && options.session) ||
+                    (this.config && (this.config.useWebStorage === 'session'));
+            if (useSession) {
+                oldValue =  this.storage.getSessionObject(path);
+                this.storage.setSessionObject(path, value);
+            } else {
+                oldValue =  this.storage.getLocalObject(path);
+                this.storage.setLocalObject(path, value);
+            }
             this.changeEvent({path: path, oldValue: oldValue, newValue: value});
         }
     });
