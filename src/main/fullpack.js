@@ -1,5 +1,6 @@
 define([
     "./GadgetSpace",
+    "./PageRoutingGadgetSpace",
     "./SmithyProxy",
     "./dojoviews/DojoViewFactory",
     "./lifecycle/LifeCycle",
