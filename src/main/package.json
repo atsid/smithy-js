@@ -1,7 +1,36 @@
 {
     "name": "smithy-js",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "description": "A library for building gadget-based applications.",
+    "keywords": ["gadgets", "schema", "application", "application framework", "bullhorn", "circuits", "schematic"],
+    "homepage": "http://atsid.github.io/",
+    "licenses": [
+        {
+            "type": "Apache2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0"
+        }
+    ],
+    "contributors": [
+        {
+            "name": "tom-servo"
+        },
+        {
+            "name": "talkswithnumbers"
+        },
+        {
+            "name": "bradmop"
+        },
+        {
+            "name": "Scott Smith"
+        }
+    ],
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/atsid/smithy-js.git"
+    },
+    "dojoBuild": "smithy.profile.js",
     "dependencies": {
+    },
+    "optionalDependencies": {
     }
 }
