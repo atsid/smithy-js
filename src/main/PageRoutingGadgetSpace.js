@@ -159,11 +159,13 @@ define([
 
         /**
          * If page routing is being used and there is a routing spec, route to
-         * the given route name.
+         * the given route name.  If a key matches a replace value in the path,
+         * that key is removed from the params clone so as not to show up in the
+         * query string as well as in the path.
          */
         routeTo: function(name, params) {
             var path, route, routingSpec = this.config.routingSpecification,
-                embedded;
+                embedded, paramsClone = util.mixin({}, params);
             if (this.router && routingSpec && routingSpec.routes[name]) {
                 route = routingSpec.routes[name];
                 // set path to default
@@ -171,12 +173,13 @@ define([
                 // replace params
                 embedded = route.url.match(/{(.*?)}/g) || [];
                 embedded.forEach(function (key, idx, obj) {
-                    var val = params && params[key.replace(/[{}]/g, "")];
+                    var val = paramsClone && paramsClone[key.replace(/[{}]/g, "")];
                     if (val) {
                         path = path.replace(key, encodeURIComponent(val));
+                        delete paramsClone[key.replace(/[{}]/g, "")];
                     }
                 });
-                this.router.go(path, params);
+                this.router.go(path, paramsClone);
             }
         },
 
