@@ -77,7 +77,7 @@ define([
                     window.onload = function () {
                         var relevantPath = currentLoc.pathname.replace(urlPattern, ""),
                             matched;
-                        Object.keys(callbacks).forEach(function (key, idx, obj) {
+                        Object.keys(callbacks).some(function (key, idx, obj) {
                             var d = callbacks[key],
                                 matches = d.rgx.exec(relevantPath);
                             if (matches && matches !== null) {
@@ -87,6 +87,7 @@ define([
                                     search: currentLoc.search
                                 });
                             }
+                            return matched;
                         });
                         if (!matched && noMatchFn) {
                             noMatchFn({
