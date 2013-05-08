@@ -113,7 +113,11 @@ define([
                         newPath = newPath.match(urlPattern)[0];
                         newPath = newPath + location;
                     } else {
-                        newPath = currentLoc.pathname + "/" + location;
+                        if (currentLoc.pathname.charAt(currentLoc.pathname.length-1) === "/") {
+                            newPath = currentLoc.pathname + location;
+                        } else {
+                            newPath = currentLoc.pathname + "/" + location;                        
+                        }
                     }
                     if (params && Object.keys(params).length) {
                         var searchStr;
