@@ -17,7 +17,6 @@ define([
 
         addChild: function (view) {
             this.inherited(arguments);
-            //this.set("title", view.title);
         },
 
         removeChild: function (childView) {
