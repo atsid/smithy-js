@@ -23,20 +23,21 @@ require([
 
         // Test registering a pattern with the router.
         testRegisterDefault: function () {
-            var called,
+            var called = 0,
                 callback = function (location) {
-                    called = location;
+                    called += 1;
                 },
                 oldOnload = window.onload,
                 rouerOnload;
             this.router.register(new RegExp(window.location.pathname.replace(/slave/, "")), callback);
+            this.router.register(/.*/ , callback);
             this.router.startup();
             // call the onload by hand since we can't reload the page.
             routerOnload = window.onload;
             routerOnload();
             window.onload = oldOnload;
             assertNotUndefined(called);
-            assertEquals(called.pathname, window.location.pathname.replace(/slave/, ""));
+            assertEquals(1, called);
         },
 
         // test is default
