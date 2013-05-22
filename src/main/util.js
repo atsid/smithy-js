@@ -16,7 +16,7 @@ define([
              * Simple dojo.mixin replacement.
              */
             mixin: function (target, source) {
-                for (name in source) {
+                for (var name in source) {
                     target[name] = source[name];
                 }
                 return target;

@@ -71,12 +71,19 @@ define([
          *
          * The Service instance will be added directly to the gadget using its name, like gadget.CaseService,
          * so you can call it easily, such as this.CaseService.readCase({args}, {plugins/callbacks});
+         * @param service - the service name or an already loaded smd.
+         * @param plugins - plugins to apply to the service.
          */
-        registerService: function (serviceName, plugins) {
-            var service = this.serviceFactory.getServiceByName(serviceName, plugins);
-            this[service.name] = service;
-            this.registry.addToRegistry(this.registry.locServices, service.name, service);
-            return service;
+        registerService: function (service, plugins) {
+            var svc;
+            if (typeof service === "string") {
+                svc = this.serviceFactory.getServiceByName(service, plugins);
+            } else if (service.schemaId) {
+                svc = this.serviceFactory.getService(service, plugins);
+            }
+            this[svc.name] = svc;
+            this.registry.addToRegistry(this.registry.locServices, svc.name, svc);
+            return svc;
         }
     });
 
