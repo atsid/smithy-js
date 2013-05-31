@@ -113,7 +113,9 @@ define([
                                 area.view.addChild(subArea.view, name);
                             }
                             if (parent.renderedOnce &&
-                                    !parent.view.hasChild(area.view)) {
+                                    !parent.view.hasChild(area.view) &&
+                                    !area.renderedParent) {
+                                area.renderedParent = true;
                                 parent.render();
                             }
                         }
@@ -288,7 +290,7 @@ define([
          */
         removeSubAreaAtIndex: function (area, idx) {
             if (this.view) {
-                this.view.removeChild(area.view);
+                this.view.removeChild(area.view, idx);
             }
             area.destroy();
             this.layout.remove(this, idx, this.config.layoutMode);

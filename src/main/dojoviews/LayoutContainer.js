@@ -535,7 +535,7 @@ define([
          * Remove child from layout
          * @param {dijit._WidgetBase | HTMLElement} widgetOrNode Child to remove
          */
-        removeChild: function (widgetOrNode) {
+        removeChild: function (widgetOrNode, index) {
             var widgetNode = widgetOrNode.domNode,
                 node = widgetNode || widgetOrNode,
                 isWidget = !!widgetNode,
@@ -545,6 +545,10 @@ define([
                 this.inherited(arguments);
             } else {
                 areaNode.removeChild(node);
+            }
+            
+            if (typeof index === 'number') {
+                this.removeArea(index);
             }
 
             this.onRemoveChild(this, areaNode, widgetOrNode);
@@ -630,13 +634,13 @@ define([
             area.gripHandler = [
                 this.connect(gripHover, "onmouseover", function (e) {
                     this._handleGripMouseOver(e, grip);
-                })[0],
+                }),
                 this.connect(gripHover, "onmouseout", function (e) {
                     this._handleGripMouseOut(e, grip);
-                })[0],
+                }),
                 this.connect(splitter, "onmousedown", function (e) {
                     this._handleResizeAreaOn(e, grip);
-                })[0]
+                })
             ];
 
             if (this.isCollapsible) {
@@ -657,9 +661,9 @@ define([
         _deleteAreaGrip: function (area) {
             var un; //undefined
             dojoArray.forEach(area.gripHandler, this.disconnect, this);
-            domConstruct.destroy(this.domNode.removeChild(area.grip));
-            area.gripHandler = un;
-            area.grip = un;
+            domConstruct.destroy(this.domNode.removeChild(area.grip.splitter));
+            delete area.gripHandler;
+            delete area.grip;
         },
 
         /**
