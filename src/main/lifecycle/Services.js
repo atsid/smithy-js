@@ -78,7 +78,7 @@ define([
             var svc;
             if (typeof service === "string") {
                 svc = this.serviceFactory.getServiceByName(service, plugins);
-            } else if (service.schemaId) {
+            } else if (service) {
                 svc = this.serviceFactory.getService(service, plugins);
             }
             this[svc.name] = svc;
