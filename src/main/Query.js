@@ -2,13 +2,13 @@
  * Json Query placeholder
  */
 define([
+    "./JSONQuery"
  ], function (
+    JSONQuery
  ) {
 
     var module = function queryFunction(query, obj) {
-        if (window.JSONQuery) {
-            return window.JSONQuery(query, obj);
-        }
+        return JSONQuery(query, obj);
     };
     return module;
 });

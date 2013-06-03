@@ -14,7 +14,7 @@ for publishing in a maven repository. It can be used in the following ways.
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.atsid</groupId>
 	<artifactId>smithy-js</artifactId>
-	<version>0.1.3</version>
+	<version>0.1.4</version>
 	<packaging>jar</packaging>
 
 	<!-- PROJECT PROPERTIES -->

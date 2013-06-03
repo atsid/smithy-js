@@ -386,7 +386,8 @@ define([
                 gConfig = util.mixin(
                     {
                         gadgetSpace: gadgetSpace,
-                        initData: initData
+                        initData: initData,
+                        area: this
                     },
                     that.config
                 ),
@@ -602,8 +603,22 @@ define([
          */
         getSerializedLayout: function () {
             return JSON.stringify(this.asModel("GadgetAreaSchema"));
-        }
+        },
 
+        /**
+         * Allow an area to signal a potential resize. The result
+         * will bubble up to the top window which will then ask the views
+         * to resized top-down (see GadgetAreaWindow).
+         */
+        resize: function () {
+            if (this.config.parent) {
+                this.config.parent.resize();
+            } else {
+                if (this.view) {
+                    this.view.resize()
+                }
+            }
+        }
     });
 
     return Thisctor;

@@ -259,6 +259,15 @@ define([
                     }
                 });
             });
+        },
+
+        /**
+         * Resize on the gadgetspace is a request to resize all windows.
+         */
+        resize: function () {
+            this.subAreas.forEach(function (area, idx) {
+                area.resize();
+            });
         }
 
     });

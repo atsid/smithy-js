@@ -65,8 +65,16 @@ define([
         createWindow: function (url) {
             var ret = window.open(url, this.getAddress(), "height=800,width=900");
             return ret;
-        }
+        },
 
+        /**
+         * windows can't go any higher so just do a resize on the view.
+         */
+        resize: function () {
+            if (this.view) {
+                this.view.resize();
+            }
+        }
     });
 
     return module;
