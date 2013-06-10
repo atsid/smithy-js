@@ -18,9 +18,11 @@ define([
         constructor: function (config) {
             this.ApplicationTitle = (config && config.initData && config.initData.applicationTitle) ||
                 "A Smithy-js Test Application";
+            this.style = "width: 30%";
         },
 
         name: "TitleGadget",
+        title: "Title Gadget",
 
         setupView: function () {
             this.inherited(arguments);

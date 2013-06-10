@@ -1,0 +1,133 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title></title>
+    <link id="themeStyles" rel="stylesheet" href="./lib/dojo-1.8.0/dijit/themes/claro/claro.css">
+    <link id="themeStyles" rel="stylesheet" href="../main/dojoviews/css/layout-container.css">
+    <style type="text/css">html, body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        overflow:hidden;
+    }
+    #borderContainer {
+        width: 100%;
+        height: 100%;
+    }</style>
+    <script src="lib/JSONQuery.js"></script>
+    <script>
+        var path = location.pathname.replace(/\/[^/]+$/, '');
+        dojoConfig = {
+            async: true,
+            paths: {
+                "dijit": path + '/lib/dojo-1.8.0/dijit',
+                "dojo": path + '/lib/dojo-1.8.0/dojo',
+                "smithy": path + '/../main',
+                "bullhorn": path + '/lib/bullhorn',
+                "appschema": path + '/schema',
+                "gadgets": path + '/gadgets'
+            },
+            aliases: [
+                    ["smithy/HashRouter", "dojo/router"]
+            ]
+        };
+    </script>
+    <script src="lib/dojo-1.8.0/dojo/dojo.js"></script>
+    <script>
+        require([
+            "smithy/AmdResolver",
+            "smithy/GadgetSpace",
+            "smithy/GadgetArea",
+            "smithy/dojoviews/DojoViewFactory",
+            "smithy/GadgetFactory",
+            "bullhorn/ChannelFactory",
+                "dojo/router"
+        ], function (
+                AmdResolver,
+                GadgetSpace,
+                GadgetArea,
+                DojoViewFactory,
+                GadgetFactory,
+                ChannelFactory,
+                router
+        ) {
+            var vfact, gfact, cfact, app;
+
+            router.register(/[0-9]+/, function () {
+                console.log("Hash changed: " + arguments);
+            });
+            router.startup();
+
+            // setup factories for gadget space configuration
+            gfact = new GadgetFactory({
+                resolver: new AmdResolver({
+                    path: "gadgets/",
+                    synchronous: true
+                }).resolver,
+                resolverAsync: function (name, callback, scope) {
+                    require(["gadgets/" + name], function (gadget) {
+                        callback.call(scope, gadget);
+                    });
+                }
+            });
+            // use dojo views rooted at a particular div for the main window
+            vfact = new DojoViewFactory({
+                root: 'gadgetSpace',
+                configMap: {
+                    "/windows[0]": { style: "height:100%; width:100%" },
+                    "/windows[0]/left": { style: "height:100%; width:50%" },
+                    "/windows[0]/right": { style: "height:100%; width:50%" }
+                }
+            });
+
+            // setup channel factory to find channels.
+            cfact = new ChannelFactory({
+                resolver: new AmdResolver({
+                    path: "appschema/",
+                    synchronous: true
+                }).resolver
+            });
+
+            // instantiate gadget space
+            //"file:///C:/webstorm/modules/smithy-js/src/test/page/GadgetSpaceSample.html"
+            app = new GadgetSpace({
+                gadgetFactory: gfact,
+                viewFactory: vfact,
+                channelFactory: cfact,
+                extendedWindowConfig: {
+                    url: "ExtendedWindow.html"
+                }
+            });
+
+            // register gadgets with gadget space.
+            app.addGadget("TitleGadget", {
+                data: {applicationTitle: "Smithy layout Example"}
+            });
+            app.addGadget("ToolBarGadget", {});
+            app.addGadget("TextAreaGadget", {});
+            app.addGadget("WidgetTestGadget", {});
+
+            // load gadgets in the first window
+            //app.loadGadgetTo("TitleGadget", "windows[0]/top", true);
+            app.loadGadgetTo("TitleGadget", "windows[0]/left/tabs[0]", true);
+            app.loadGadgetTo("TitleGadget", "windows[0]/left/tabs[1]", true);
+            app.loadGadgetTo("TitleGadget", "windows[0]/right/tabs[0]", true);
+            app.loadGadgetTo("TitleGadget", "windows[0]/right/tabs[1]", true);
+//            app.loadGadgetTo("TitleGadget", "windows[0]/top", true);
+//            app.loadGadgetTo("WidgetTestGadget", "windows[0]/center/columns[0]", true);
+//            app.loadGadgetTo("WidgetTestGadget", "windows[0]/center/center", true);
+//            app.loadGadgetTo("TextAreaGadget", "windows[0]/center/left", true);
+//            app.loadGadgetTo("TextAreaGadget", "windows[0]/center/right", true);
+//            app.loadGadgetTo("ToolBarGadget", "windows[0]/top", true);
+
+            // render app
+            app.render();
+         });
+    </script>
+
+</head>
+<body class="claro">
+   <div id="gadgetSpace"></div>
+</body>
+</html>
