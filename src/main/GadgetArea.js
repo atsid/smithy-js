@@ -106,7 +106,7 @@ define([
                         area.view = area.getViewFactory().createView(area, mode);
                     }
                     area.subAreas.forEach(function (subArea, idx) {
-                        var name = (mode === "borders" ? names[idx] : undefined);
+                        var name = (mode === "borders" ? names[idx] : (mode === 'rows' || mode === 'columns' ? idx : undefined));
                         if (subArea) {
                             subArea.render();
                             if (!area.view.hasChild(subArea.view)) {
@@ -211,6 +211,7 @@ define([
          */
         addArea: function (address, createIntermediateAreas, area) {
             var massagedAddress = address.charAt(0) === '/' ? address.slice(1) : address,
+                insert = createIntermediateAreas && createIntermediateAreas.insertAt,
                 areas = massagedAddress.split("/"),
                 first = areas.shift(),
                 top,
@@ -221,19 +222,27 @@ define([
             if (!this.config.layoutMode) {
                 this.config.layoutMode = this.layout.impliedMode(first);
             }
-
+            if (insert && insert.length) {
+                insert = createIntermediateAreas.insertAt.indexOf('/') === -1;
+                createIntermediateAreas.insertAt = createIntermediateAreas.insertAt.replace(/[^\/]+\//, '');
+                if (insert) {
+                    createIntermediateAreas.insertAt = false;
+                }
+            }
             top = (first === "next" ? this.subAreas.length :
                     this.layout.index(first, this.config.layoutMode));
 
             // if this area does not exist then create it.
-            if (!this.subAreas[top]) {
+            if (!this.subAreas[top] || insert) {
                 util.mixin(newConfig, this.config);
                 if (!createIntermediateAreas && !isLast) {
                     throw new Error("Missing intermediate area: " + first);
                 }
                 newConfig.parent = this;
                 newConfig.layoutMode = this.layout.impliedMode(areas[0] || first);
-                if (isLast) {
+                if (insert) {
+                    this.subAreas.splice(top, 0, area || this.createSubArea(newConfig));
+                } else if (isLast) {
                     this.subAreas[top] = area || this.createSubArea(newConfig);
                 } else {
                     this.subAreas[top] = this.createSubArea(newConfig);

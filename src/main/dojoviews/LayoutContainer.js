@@ -509,7 +509,8 @@ define([
 
             areaNode = areas[index].node;
             if (areaNode.firstChild) {
-                throw 'Error inserting child into already filled index: ' + index;
+                this.addArea(index);
+                areaNode = areas[index].node
             }
 
             if (isWidget) {
