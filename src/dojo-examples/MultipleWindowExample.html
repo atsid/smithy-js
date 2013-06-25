@@ -23,6 +23,7 @@
                 "dojo": path + '/lib/dojo-1.8.0/dojo',
                 "smithy": path + '/../main',
                 "bullhorn": path + '/lib/bullhorn',
+                "schematic": path + '/lib/schematic',
                 "appschema": path + '/schema',
                 "gadgets": path + '/gadgets'
             }
@@ -36,6 +37,7 @@
             "smithy/GadgetArea",
             "smithy/dojoviews/DojoViewFactory",
             "smithy/GadgetFactory",
+            "schematic/ModelFactory",
             "bullhorn/ChannelFactory"
         ], function (
                 AmdResolver,
@@ -43,9 +45,10 @@
                 GadgetArea,
                 DojoViewFactory,
                 GadgetFactory,
+                ModelFactory,
                 ChannelFactory
         ) {
-            var vfact, gfact, cfact, app;
+            var vfact, gfact, cfact, mfact, app;
 
             // setup factories for gadget space configuration
             gfact = new GadgetFactory({
@@ -65,14 +68,27 @@
                 }).resolver
             });
 
+            // setup channel factory to find channels.
+            mfact = new ModelFactory({
+                resolver: new AmdResolver({
+                    path: "appschema/",
+                    synchronous: true
+                }).resolver
+            });
+
             // instantiate gadget space
             //"file:///C:/webstorm/modules/smithy-js/src/test/page/GadgetSpaceSample.html"
             app = new GadgetSpace({
                 gadgetFactory: gfact,
                 viewFactory: vfact,
                 channelFactory: cfact,
+                modelFactory: mfact,
                 extendedWindowConfig: {
-                    url: "ExtendedWindow.html"
+                    url: "ExtendedWindow.html",
+                    options: "location=no, menubar=no, toolbar=no, titlebar=no",
+                    configMap: {
+                        "/windows[1]": "height=768, width=1024"
+                    }
                 }
             });
 

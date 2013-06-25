@@ -14,6 +14,7 @@ define([
     var util = new Util(),
         module = declare(null, {
         constructor: function (config) {
+            var that = this;
             if (util.isUndefined(config.gadgetFactory)) {
                 throw new Error("Must supply a gadgetFactory to a SmithyProxy");
             }
@@ -21,7 +22,12 @@ define([
                 throw new Error("Must supply a viewFactory to a SmithyProxy");
             }
             if (util.isUndefined(window.smithyCallback)) {
-                throw new Error("No smithyCallback defined for this window");
+                if (!window.opener.lastwin || window.opener.lastwin.window !== window) {
+                    throw new Error("No smithyCallback defined for this window");
+                } else {
+                    console.log("using old callback");
+                    window.smithyCallback = window.opener.lastwin.callback;
+                }
             }
             if (!util.isUndefined(window.smithyProxy)) {
                 throw new Error("There is a smithy proxy already defined for this window.");
@@ -32,9 +38,9 @@ define([
                 window.smithyProxy = this;
             }
             // TODO: use html 5 messaging if available instead.
-            window.smithyCallback("loaded");
+            window.smithyCallback("loaded", window);
             window.onbeforeunload = function () {
-                window.smithyCallback("unloaded");
+                window.smithyCallback("unloaded", window);
             };
         }
     });

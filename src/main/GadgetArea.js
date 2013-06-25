@@ -12,12 +12,14 @@ define([
     "./util",
     "./Logger",
     "./BasePlate",
+    "./md5",
     "./Query"
 ], function (
     declare,
     Util,
     Logger,
     BasePlate,
+    md5,
     jsonQuery
 ) {
 
@@ -289,6 +291,17 @@ define([
                 }
             }, this);
             return area;
+        },
+
+        /**
+         * Remove all sub-areas of this area.
+         */
+        clearSubAreas: function () {
+            this.subAreas.forEach(function (obj, idx) {
+                if (obj) {
+                    this.removeSubAreaAtIndex(obj, idx);
+                }
+            }, this);
         },
 
         /**
@@ -612,6 +625,29 @@ define([
          */
         getSerializedLayout: function () {
             return JSON.stringify(this.asModel("GadgetAreaSchema"));
+        },
+
+        /**
+         * Store a serialized version of the this area's layout to
+         * Slag under an md5 key.
+         * @param md5 - the md5 key of the layout
+         * @param leave - whether or not to leave the current layout.
+         */
+        unstashLayout: function (md5, leave) {
+            var layout = this.getSlagData(md5);
+            this.realizeLayout(layout, leave);
+        },
+
+        /**
+         * Store a serialized version of the this area's layout to
+         * Slag under an md5 key.
+         */
+        stashLayout: function () {
+            var layout, vmd5;
+            layout = this.getSerializedLayout();
+            vmd5 = md5(layout);
+            this.setSlagData(vmd5, layout);
+            return vmd5;
         },
 
         /**

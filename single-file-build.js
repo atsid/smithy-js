@@ -14,5 +14,5 @@
         dijit: "empty:"
     },
     name: "smithy/fullpack",
-    out: "smithy-0.1.6-min.js"
+    out: "smithy-0.1.7-min.js"
 })

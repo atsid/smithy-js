@@ -7,13 +7,11 @@ define([
     "./declare",
     "./util",
     "./GadgetSpace",
-    "./md5",
     "./PageRouter"
 ], function (
     declare,
     Util,
     GadgetSpace,
-    md5,
     Router
 ) {
     var util = new Util(),
@@ -71,7 +69,8 @@ define([
                         var val = routingSpec.routes[key],
                             rgx;
                         if (key !== "error") {
-                            rgx = val.url.replace(/\{.*\}/, "(.*)") || "^$";
+                            rgx = val.url.replace(/\{.*\}/, "([^/]*)") || "^$";
+                            rgx.charAt(rgx.length - 1) !== "$" ? rgx += "^$" : "";
                             that.router.register(new RegExp(rgx), function (loc) {
                                 that.lastRouteParams = that.processRouteParams(loc, val);
                                 that.processStoredLayout(loc, val);
@@ -104,15 +103,6 @@ define([
                 });
             }
             return ret;
-        },
-
-        /**
-         * Saved a layout for a particular key.
-         * @param key - key to store the layout under
-         * @param layout - the layout to store.
-         */
-        saveStoredLayout: function (key, layout) {
-            this.setSlagData(key, layout);
         },
 
         /**
@@ -194,13 +184,9 @@ define([
          *   realized).
          */
         routePage: function() {
-            var layout, md5Id;
             if (this.router) {
-                // save layout.
-                layout = this.getSerializedLayout();
-                md5Id = md5(layout);
-                this.saveStoredLayout(md5Id, layout);
-                this.router.go(md5Id);
+                // save layout and route
+                this.router.go(this.stashLayout());
             }
         },
 

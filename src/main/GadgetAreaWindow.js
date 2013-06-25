@@ -28,19 +28,50 @@ define([
             // create the window.
             var that = this,
                 windowRef = this.config.windowRef,
-                url = (this.config.extendedWindowConfig && this.config.extendedWindowConfig.url) || "";
+                extCfg = this.config.extendedWindowConfig,
+                options = extCfg && extCfg.options,
+                url = (extCfg && extCfg.url) || "";
+            options += ", " + (extCfg.configMap && extCfg.configMap[this.getAddress()]);
             if (!windowRef.window) {
-                windowRef.window = this.createWindow(url);
+                windowRef.window = this.createWindow(url, options);
                 // set window up to participate
                 this.pendingCalls.push(callback);
                 // TODO: use html 5 messaging instead if available
-                windowRef.window.smithyCallback = function (option) {
+                windowRef.window.smithyCallback = function (option, win) {
+                    var lastwin = window.lastwin;
+                    // Most of the complexity here is having to handle
+                    // the fact that the only difference between a refresh
+                    // and a close on the extended window is that you get
+                    // both "loaded" and "unloaded" events.
+                    // For a refresh the layout is stored and re-rendered.
                     if (option === "loaded") {
-                        that.pendingCalls.forEach(function (func) {
-                            func();
-                        });
+                        // this was a refresh
+                        if (lastwin && lastwin.window === win) {
+                            windowRef.window = win;
+                            that.unstashLayout(window.lastwin.layout, true);
+                            that.render();
+                        } else {
+                            that.pendingCalls.forEach(function (func) {
+                                func();
+                            });
+                            that.pendingCalls = [];
+                        }
                     } else if (option === "unloaded") {
-                        that.config.parent.removeSubArea(that);
+                        // store window layout in case it is a refresh.
+                        if (windowRef.window === win) {
+                            window.lastwin = {
+                                window: win,
+                                callback: windowRef.window.smithyCallback,
+                                layout: that.stashLayout()
+                            }
+                            that.clearSubAreas();
+                            that.config.windowRef.window = undefined;
+                            if (that.view) {
+                                that.view.destroy();
+                                delete that.view;
+                                that.rendered = that.renderedOnce = false;
+                            }
+                        }
                     }
                 };
             } else if (!windowRef.window.smithyProxy) {
@@ -62,8 +93,11 @@ define([
             });
         },
 
-        createWindow: function (url) {
-            var ret = window.open(url, this.getAddress(), "height=800,width=900");
+        createWindow: function (url, options) {
+            var ret = window.lastwin && window.lastwin.window;
+            if (!ret || ret.name !== this.getAddress()) {
+                ret = window.open(url, this.getAddress(), options);
+            }
             return ret;
         },
 

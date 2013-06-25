@@ -1,0 +1,139 @@
+/* LayoutContainer */
+.layoutContainerH {
+  display: block;
+  position: relative;
+  margin: 0;
+  width: 100%;
+  height: auto;
+}
+.layoutContainerV {
+  display: block;
+  position: relative;
+  margin: 0;
+  height: 100%;
+  width: auto;
+}
+.layoutAreaContainerH {
+  width: 100%;
+}
+.layoutAreaContainerV {
+  height: 100%;
+}
+.layoutContainerAreaH {
+  vertical-align: top;
+  height: 100%;
+}
+.layoutContainerAreaV {
+  left: 0;
+  width: 100%;
+}
+/* layout container grips */
+.layoutContainerGripSplitterV {
+  z-index: 1000;
+  position: absolute;
+  height: 100%;
+  top: 0;
+  width: 16px;
+  cursor: col-resize;
+}
+.layoutContainerGripSplitterH {
+  z-index: 1000;
+  position: absolute;
+  width: 100%;
+  left: 0;
+  height: 16px;
+  cursor: row-resize;
+}
+.layoutContainerGripSplitterHover .layoutContainerGripV,
+.layoutContainerActiveSplitter .layoutContainerGripV {
+  background-color: #c6cbec;
+  border-left: 1px solid #c5c6cc;
+  border-right: 1px solid #c5c6cc;
+}
+.layoutContainerGripSplitterHover .layoutContainerGripH,
+.layoutContainerActiveSplitter .layoutContainerGripH {
+  background-color: #c6cbec;
+  border-top: 1px solid #c5c6cc;
+  border-bottom: 1px solid #c5c6cc;
+}
+.layoutContainerGripShowNormalV {
+  background-color: #e3e3e7;
+  border-left: 1px solid #c5c6cc;
+  border-right: 1px solid #c5c6cc;
+}
+.layoutContainerGripShowNormalH {
+  background-color: #e3e3e7;
+  border-top: 1px solid #c5c6cc;
+  border-bottom: 1px solid #c5c6cc;
+}
+.layoutContainerGripV {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  left: 50%;
+  cursor: col-resize;
+  position: absolute;
+}
+.layoutContainerGripH {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  top: 50%;
+  cursor: row-resize;
+  position: absolute;
+}
+.layoutContainerGripHandleV {
+  width: 18px;
+  z-index: 1001;
+  position: absolute;
+  left: -1px;
+}
+.layoutContainerGripHandleH {
+  height: 18px;
+  z-index: 1001;
+  position: absolute;
+  top: -1px;
+}
+.layoutContainerGripLeftV,
+.layoutContainerGripRightV {
+  background: url(images/gripResizeHandleSprites.png);
+  background-repeat: no-repeat;
+  height: 39px;
+  width: 18px;
+  cursor: pointer;
+}
+/* leftH is really up, rightH is down */
+.layoutContainerGripLeftH,
+.layoutContainerGripRightH {
+  background: url(images/gripResizeHandleSpritesH.png);
+  background-repeat: no-repeat;
+  height: 18px;
+  width: 39px;
+  cursor: pointer;
+}
+.layoutContainerGripLeftV {
+  background-position: 0px -45px;
+}
+.layoutContainerGripRightV {
+  background-position: 0px 0px;
+}
+.layoutContainerGripLeftH {
+  background-position: 0px -18px;
+  display: inline-block;
+}
+.layoutContainerGripRightH {
+  background-position: -45px -18px;
+  display: inline-block;
+}
+.layoutContainerGripLeftV:hover {
+  background-position: -18px -45px;
+}
+.layoutContainerGripRightV:hover {
+  background-position: -18px 0px;
+}
+.layoutContainerGripLeftH:hover {
+  background-position: 0px 0px;
+}
+.layoutContainerGripRightH:hover {
+  background-position: -45px 0px;
+}
