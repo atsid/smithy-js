@@ -69,8 +69,8 @@ define([
                         var val = routingSpec.routes[key],
                             rgx;
                         if (key !== "error") {
-                            rgx = val.url.replace(/\{.*\}/, "([^/]*)") || "^$";
-                            rgx.charAt(rgx.length - 1) !== "$" ? rgx += "^$" : "";
+                            rgx = val.url.replace(/\{.*\}/, "([^/]*)") || "$";
+                            rgx.charAt(rgx.length - 1) !== "$" ? rgx += "$" : "";
                             that.router.register(new RegExp(rgx), function (loc) {
                                 that.lastRouteParams = that.processRouteParams(loc, val);
                                 that.processStoredLayout(loc, val);
@@ -113,11 +113,11 @@ define([
         processStoredLayout: function(key, route) {
             var id = (route && route.id) || key.pathname,
                 layout = this.getStoredLayout(id);
-            if (typeof layout === 'string') {
+                if (typeof layout === 'string') {
                 this.realizeLayout(JSON.parse(layout), true);
-            } else {
+                } else {
                 this.realizeLayout(layout, true);
-            }
+                }
         },
 
         /**
@@ -172,7 +172,7 @@ define([
                 this.router.go(path, paramsClone);
             }
         },
-
+    
         /**
          * If page routing is enabled on the GadgetSpace this method will get a serialized
          * version of the current layout, take an md5 of it, store the layout
