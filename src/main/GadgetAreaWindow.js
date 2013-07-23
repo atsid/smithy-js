@@ -31,7 +31,7 @@ define([
                 extCfg = this.config.extendedWindowConfig,
                 options = extCfg && extCfg.options,
                 url = (extCfg && extCfg.url) || "";
-            options += ", " + (extCfg.configMap && extCfg.configMap[this.getAddress()]);
+            options += ", " + (extCfg && extCfg.configMap && extCfg.configMap[this.getAddress()]);
             if (!windowRef.window) {
                 windowRef.window = this.createWindow(url, options);
                 // set window up to participate

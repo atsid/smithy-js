@@ -70,7 +70,7 @@ define([
                             rgx;
                         if (key !== "error") {
                             rgx = val.url.replace(/\{.*\}/, "([^/]*)") || "^$";
-                            rgx.charAt(rgx.length - 1) !== "$" ? rgx += "^$" : "";
+                            rgx.charAt(rgx.length - 1) !== "$" ? rgx += "$" : "";
                             that.router.register(new RegExp(rgx), function (loc) {
                                 that.lastRouteParams = that.processRouteParams(loc, val);
                                 that.processStoredLayout(loc, val);
