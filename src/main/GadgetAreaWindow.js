@@ -29,9 +29,9 @@ define([
             var that = this,
                 windowRef = this.config.windowRef,
                 extCfg = this.config.extendedWindowConfig || {},
-                options = extCfg && extCfg.options,
-                url = (extCfg && extCfg.url) || "";
-            options += ", " + (extCfg && extCfg.configMap && extCfg.configMap[this.getAddress()]);
+                options = extCfg.options,
+                url = extCfg.url || "";
+            options += ", " + (extCfg.configMap && extCfg.configMap[this.getAddress()]);
             if (!windowRef.window) {
                 windowRef.window = this.createWindow(url, options);
                 // set window up to participate

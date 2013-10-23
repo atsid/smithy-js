@@ -87,10 +87,7 @@
             app = new GadgetSpace({
                 gadgetFactory: gfact,
                 viewFactory: vfact,
-                channelFactory: cfact,
-                extendedWindowConfig: {
-                    url: "ExtendedWindow.html"
-                }
+                channelFactory: cfact
             });
 
             // register gadgets with gadget space.
@@ -103,11 +100,11 @@
 
             // load gadgets in the first window
             app.loadGadgetTo("TitleGadget", "windows[0]/top", true);
-            app.loadGadgetTo("WidgetTestGadget", "windows[0]/center/columns[0]", true);
+            app.loadGadgetTo("WidgetTestGadget", "windows[0]/center/center/columns[0]", true);
 //            app.loadGadgetTo("WidgetTestGadget", "windows[0]/center/center", true);
 //            app.loadGadgetTo("TextAreaGadget", "windows[0]/center/left", true);
 //            app.loadGadgetTo("TextAreaGadget", "windows[0]/center/right", true);
-            app.loadGadgetTo("ToolBarGadget", "windows[0]/top", true);
+            app.loadGadgetTo("ToolBarGadget", "windows[0]/center/top", true);
 
             // render app
             app.render();
