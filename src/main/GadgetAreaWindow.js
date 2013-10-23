@@ -28,7 +28,7 @@ define([
             // create the window.
             var that = this,
                 windowRef = this.config.windowRef,
-                extCfg = this.config.extendedWindowConfig,
+                extCfg = this.config.extendedWindowConfig || {},
                 options = extCfg && extCfg.options,
                 url = (extCfg && extCfg.url) || "";
             options += ", " + (extCfg && extCfg.configMap && extCfg.configMap[this.getAddress()]);
