@@ -113,11 +113,11 @@ define([
         processStoredLayout: function(key, route) {
             var id = (route && route.id) || key.pathname,
                 layout = this.getStoredLayout(id);
-                if (typeof layout === 'string') {
+            if (typeof layout === 'string') {
                 this.realizeLayout(JSON.parse(layout), true);
-                } else {
+            } else {
                 this.realizeLayout(layout, true);
-                }
+            }
         },
 
         /**
@@ -172,7 +172,7 @@ define([
                 this.router.go(path, paramsClone);
             }
         },
-    
+
         /**
          * If page routing is enabled on the GadgetSpace this method will get a serialized
          * version of the current layout, take an md5 of it, store the layout
