@@ -124,6 +124,9 @@ define([
                         var searchStr;
                         Object.keys(params).forEach(function (key, idx, obj) {
                             searchStr = searchStr || "?";
+                            if(searchStr.length !== "?") { 
+                                searchStr += "&";
+                            }
                             searchStr = searchStr + key + "=" + encodeURIComponent(params[key]);
                         });
                         newPath = newPath + searchStr;
