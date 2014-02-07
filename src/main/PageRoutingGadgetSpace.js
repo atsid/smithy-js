@@ -153,7 +153,7 @@ define([
          * that key is removed from the params clone so as not to show up in the
          * query string as well as in the path.
          */
-        routeTo: function(name, params) {
+        routeTo: function(name, params, hashParams) {
             var path, route, routingSpec = this.config.routingSpecification,
                 embedded, paramsClone = util.mixin({}, params);
             if (this.router && routingSpec && routingSpec.routes[name]) {
@@ -169,7 +169,7 @@ define([
                         delete paramsClone[key.replace(/[{}]/g, "")];
                     }
                 });
-                this.router.go(path, paramsClone);
+                this.router.go(path, paramsClone, hashParams || {});
             }
         },
 

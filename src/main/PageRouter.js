@@ -108,7 +108,7 @@ define([
                  * }
                  * converted to "?paramName=paramValue".
                  */
-                this.go = function (location, params) {
+                this.go = function (location, params, hashParams) {
                     var newPath = currentLoc.pathname;
                     if (!this.isDefault()) {
                         newPath = newPath.match(urlPattern)[0];
@@ -124,12 +124,24 @@ define([
                         var searchStr;
                         Object.keys(params).forEach(function (key, idx, obj) {
                             searchStr = searchStr || "?";
-                            if(searchStr.length !== "?") { 
+                            if (searchStr !== "?") { 
                                 searchStr += "&";
                             }
                             searchStr = searchStr + key + "=" + encodeURIComponent(params[key]);
                         });
                         newPath = newPath + searchStr;
+                    }
+                    // Optional handling for hashParams
+                    if (hashParams && Object.keys(hashParams).length) {
+                        var hashStr;
+                        Object.keys(hashParams).forEach(function (key, idx, obj) {
+                            hashStr = hashStr || "#";
+                            if (hashStr !== "#") { 
+                                hashStr += "&";
+                            }
+                            hashStr = hashStr + key + "=" + encodeURIComponent(hashParams[key]);
+                        });
+                        newPath = newPath + hashStr;
                     }
                     currentLoc.assign(newPath);
                 };
