@@ -109,7 +109,7 @@ define([
                  * converted to "?paramName=paramValue".
                  */
                 this.go = function (location, params, hashParams) {
-                    var newPath = currentLoc.pathname;
+                    var newPath = currentLoc.pathname, hashPairs = [];
                     if (!this.isDefault()) {
                         newPath = newPath.match(urlPattern)[0];
                         newPath = newPath + location;
@@ -133,15 +133,18 @@ define([
                     }
                     // Optional handling for hashParams
                     if (hashParams && Object.keys(hashParams).length) {
-                        var hashStr;
-                        Object.keys(hashParams).forEach(function (key, idx, obj) {
-                            hashStr = hashStr || "#";
-                            if (hashStr !== "#") { 
-                                hashStr += "&";
+                        for(var name in hashParams){
+                            var value = hashParams[name];
+                            var assign = encodeURIComponent(name) + "=";
+                            if (value instanceof Array){
+                                for(var i = 0, l = value.length; i < l; ++i){
+                                    hashPairs.push(assign + encodeURIComponent(value[i]));
+                                }
+                            }else{
+                                hashPairs.push(assign + encodeURIComponent(value));
                             }
-                            hashStr = hashStr + key + "=" + encodeURIComponent(hashParams[key]);
-                        });
-                        newPath = newPath + hashStr;
+                        }
+                        newPath = newPath + "#" + hashPairs.join("&");
                     }
                     currentLoc.assign(newPath);
                 };
