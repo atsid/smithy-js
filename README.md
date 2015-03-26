@@ -1,3 +1,4 @@
+[![Code Climate](https://codeclimate.com/github/atsid/breadboard/badges/gpa.svg)](https://codeclimate.com/github/atsid/breadboard)
 # smithy-js - A gadget-based application framework
 
 ## Overview
