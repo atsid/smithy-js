@@ -13,7 +13,7 @@ Smithy-js is an ES5 javascript library for laying out and managing "gadgets" (se
 * Support for mapping gadget layouts to human readable url's.
 
 ## Tutorial
-A tutorial and a sample application (both built with smithy) are available [here](http://smithy-tutorial.atsid.cloudbees.net).
+A tutorial and a sample application (both built with smithy) are available [here](http://smithy-tutorial.elasticbeanstalk.com/). The tutorial code is also on [GitHub](https://github.com/atsid/smithy-tutorial).
 
 ## Gadgets
 Gadgets are a modular unit of user interface functionality. They can be thought of as a self-contained interaction component that accomplishes some aspect of the application’s functionality. The intention of segmenting functionality into these independent user interface components is that they can then be re-used as building blocks for larger aggregations of application functionality or custom workflows.
