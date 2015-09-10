@@ -1,0 +1,32 @@
+{
+  "name": "smithy-js",
+  "version": "0.1.8",
+  "description": "[![Code Climate](https://codeclimate.com/github/atsid/breadboard/badges/gpa.svg)](https://codeclimate.com/github/atsid/breadboard) # smithy-js - A gadget-based application framework",
+  "main": "gulpfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/atsid/smithy-js.git"
+  },
+  "author": "",
+  "bugs": {
+    "url": "https://github.com/atsid/smithy-js/issues"
+  },
+  "homepage": "https://github.com/atsid/smithy-js#readme",
+  "devDependencies": {
+    "gulp": "^3.9.0",
+    "gulp-jshint": "^1.11.2",
+    "gulp-requirejs-optimize": "^0.3.0",
+    "jasmine-core": "^2.3.4",
+    "jshint-stylish": "^2.0.1",
+    "karma": "^0.13.9",
+    "karma-chrome-launcher": "^0.2.0",
+    "karma-jasmine": "^0.3.6",
+    "karma-phantomjs-launcher": "^0.2.1",
+    "karma-requirejs": "^0.2.2",
+    "phantomjs": "^1.9.18",
+    "requirejs": "^2.1.4"
+  }
+}

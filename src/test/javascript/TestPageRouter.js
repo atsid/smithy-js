@@ -7,43 +7,42 @@ require([
 ], function (
     PageRouter
 ) {
-    var b;
-
     /**
      * Test n
      */
-    b = new TestCase("TestPageRouter", {
+    describe("TestPageRouter", function() {
 
-        setUp: function () {
-            this.router = new PageRouter({
+        var router;
+        beforeEach(function () {
+            router = new PageRouter({
                 mode: "url",
                 rootPattern: /slave/
             });
-        },
+        });
 
         // Test registering a pattern with the router.
-        testRegisterDefault: function () {
+        it("testRegisterDefault", function () {
             var called = 0,
                 callback = function (location) {
                     called += 1;
                 },
                 oldOnload = window.onload,
                 rouerOnload;
-            this.router.register(new RegExp(window.location.pathname.replace(/slave/, "")), callback);
-            this.router.register(/.*/ , callback);
-            this.router.startup();
+            router.register(new RegExp(window.location.pathname.replace(/slave/, "")), callback);
+            router.register(/.*/ , callback);
+            router.startup();
             // call the onload by hand since we can't reload the page.
             routerOnload = window.onload;
             routerOnload();
             window.onload = oldOnload;
-            assertNotUndefined(called);
-            assertEquals(1, called);
-        },
+            expect(called).not.toBeUndefined();
+            expect(1).toEqual(called);
+        });
 
         // test is default
-        testIsDefault: function () {
-            assertFalse(this.router.isDefault());
-        }
+        it("testIsDefault", function () {
+            expect(router.isDefault()).toBe(false);
+        });
 
     });
 

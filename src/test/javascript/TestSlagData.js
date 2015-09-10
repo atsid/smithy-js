@@ -5,61 +5,59 @@ require([
     SlagData,
     WebStorage
 ) {
-    var b;
-
     /**
      * Test operations on slag data
      */
-    b = new TestCase("TestSlagData", {
+    describe("TestSlagData", function() {
 
-        setUp: function () {
+        beforeEach(function () {
             this.webstorage = new WebStorage({namespace: "SmithySlag"});
             this.webstorage.clearLocal();
             this.webstorage.clearSession();
-        },
+        });
 
         // Test global configuration of slag data.
-        testUseOfWebStorage: function () {
+        it("testUseOfWebStorage", function () {
             var slagLocal = new SlagData({useWebStorage: "local"}),
                 slagSession = new SlagData({useWebStorage: "session"}),
                 slagObject = new SlagData({useWebStorage: false});
 
             slagLocal.set("tst/data", "testdata");
-            assertEquals("testdata", this.webstorage.getLocalObject("tst/data"));
-            assertNotEquals("testdata", this.webstorage.getSessionObject("tst/data"));
-            assertUndefined(slagLocal.data && slagLocal.data["tst/data"]);
+            expect("testdata").toEqual(this.webstorage.getLocalObject("tst/data"));
+            expect("testdata").not.toEqual(this.webstorage.getSessionObject("tst/data"));
+            expect(slagLocal.data && slagLocal.data["tst/data"]).toBeUndefined();
             slagLocal.set("tst/data", "");
 
             slagSession.set("tst/data", "testdata");
-            assertNotEquals("testdata", this.webstorage.getLocalObject("tst/data"));
-            assertEquals("testdata", this.webstorage.getSessionObject("tst/data"));
-            assertUndefined(slagSession.data && slagSession.data["tst/data"]);
+            expect("testdata").not.toEqual(this.webstorage.getLocalObject("tst/data"));
+            expect("testdata").toEqual(this.webstorage.getSessionObject("tst/data"));
+            expect(slagSession.data && slagSession.data["tst/data"]).toBeUndefined();
             slagSession.set("tst/data", "");
 
             slagObject.set("tst/data", "testdata");
-            assertNotEquals("testdata", this.webstorage.getLocalObject("tst/data"));
-            assertNotEquals("testdata", this.webstorage.getSessionObject("tst/data"));
-            assertEquals("testdata", slagObject.data["tst/data"]);
+            expect("testdata").not.toEqual(this.webstorage.getLocalObject("tst/data"));
+            expect("testdata").not.toEqual(this.webstorage.getSessionObject("tst/data"));
+            expect("testdata").toEqual(slagObject.data["tst/data"]);
             slagObject.set("tst/data", "");
-        },
+        });
 
         // Test method override of storage setting.
-        testSetMethodOverrideOfWebStorage: function () {
+        it("testSetMethodOverrideOfWebStorage", function () {
             var slagLocal = new SlagData({useWebStorage: "local"});
 
             slagLocal.set("tst/data", "testdata");
-            assertEquals("testdata", this.webstorage.getLocalObject("tst/data"));
-            assertNotEquals("testdata", this.webstorage.getSessionObject("tst/data"));
-            assertUndefined(slagLocal.data && slagLocal.data["tst/data"]);
+            expect("testdata").toEqual(this.webstorage.getLocalObject("tst/data"));
+            expect("testdata").not.toEqual(this.webstorage.getSessionObject("tst/data"));
+            expect(slagLocal.data && slagLocal.data["tst/data"]).toBeUndefined();
             slagLocal.set("tst/data", "");
 
             slagLocal.set("tst/data", "testdata", {session:true});
-            assertNotEquals("testdata", this.webstorage.getLocalObject("tst/data"));
-            assertEquals("testdata", this.webstorage.getSessionObject("tst/data"));
-            assertUndefined(slagLocal.data && slagLocal.data["tst/data"]);
+            expect("testdata").not.toEqual(this.webstorage.getLocalObject("tst/data"));
+            expect("testdata").toEqual(this.webstorage.getSessionObject("tst/data"));
+            expect(slagLocal.data && slagLocal.data["tst/data"]).toBeUndefined();
             // should still be able to get it regardless of where it is.
-            assertEquals("testdata", slagLocal.get("tst/data"));
-        }
+            expect("testdata").toEqual(slagLocal.get("tst/data"));
+        });
     });
 
 });

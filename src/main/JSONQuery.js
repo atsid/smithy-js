@@ -5,8 +5,8 @@ AMD version of JSONQuery - Kevin Convy
 Copyright Jason E. Smith 2008 Licensed under the Apache License, Version 2.0 (the "License");
 You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
 */
- 
- 
+
+
 /*
 * CREDITS:
 * Thanks to Kris Zyp from SitePen for contributing his source for
@@ -27,11 +27,11 @@ You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2
         JSONQuery(queryString)(object)
         always return identical results. The first one immediately evaluates, the second one returns a
         function that then evaluates the object.
-      
+
       example:
         JSONQuery("foo",{foo:"bar"})
         This will return "bar".
-    
+
       example:
         evaluator = JSONQuery("?foo='bar'&rating>3");
         This creates a function that finds all the objects in an array with a property
@@ -40,51 +40,49 @@ You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2
         evaluator([{foo:"bar",rating:4},{foo:"baz",rating:2}])
         This returns:
         {foo:"bar",rating:4}
-      
+
       example:
         evaluator = JSONQuery("$[?price<15.00][\rating][0:10]");
         This finds objects in array with a price less than 15.00 and sorts then
         by rating, highest rated first, and returns the first ten items in from this
         filtered and sorted list.
-        
-        
-  example:      
+
+
+  example:
     var data = {customers:[
       {name:"Susan", purchases:29},
-      {name:"Kim", purchases:150}, 
+      {name:"Kim", purchases:150},
       {name:"Jake", purchases:27}
     ]};
-    
+
     var results = json.JSONQuery("$.customers[?purchases > 21 & name='Jake'][\\purchases]",data);
-    results 
-    
+    results
+
     returns customers sorted by higest number of purchases to lowest.
 
 */
-
-define({
-}, function (
+define([], function (
 ) {
     function map(arr, fun /*, thisp*/){
         var len = arr.length;
         if (typeof fun != "function")
             throw new TypeError();
-        
+
         var res = new Array(len);
         var thisp = arguments[2];
         for (var i = 0; i < len; i++) {
             if (i in arr)
                 res[i] = fun.call(thisp, arr[i], i, arr);
         }
-        
+
         return res;
     }
- 
+
    function filter(arr, fun /*, thisp*/){
         var len = arr.length;
         if (typeof fun != "function")
             throw new TypeError();
-        
+
         var res = new Array();
         var thisp = arguments[2];
         for (var i = 0; i < len; i++) {
@@ -94,11 +92,11 @@ define({
                     res.push(val);
             }
         }
-        
+
         return res;
     };
- 
- 
+
+
   function slice(obj,start,end,step){
     // handles slice operations: [3:6:2]
     var len=obj.length,results = [];
@@ -130,7 +128,7 @@ define({
           // if we don't have a name we are just getting all the properties values (.* or [*])
           results.push(val);
         }else if(val && typeof val == 'object'){
-          
+
           walk(val);
         }
       }
@@ -152,7 +150,7 @@ define({
     }
     return results;
   }
-  
+
   function distinctFilter(array, callback){
     // does the filter with removal of duplicates in O(n)
     var outArr = [];
@@ -246,9 +244,9 @@ define({
     //    function or the evaluator function.
     //    * +, -, /, *, &, |, %, (, ), <, >, <=, >=, != - These operators behave just as they do
     //     in JavaScript.
-    //    
-    //  
-    //  
+    //
+    //
+    //
     //   |  dojox.json.query(queryString,object)
     //     and
     //   |  dojox.json.query(queryString)(object)
@@ -274,7 +272,7 @@ define({
     //     by rating, highest rated first, and returns the first ten items in from this
     //     filtered and sorted list.
     tokens = [];
-    var depth = 0;  
+    var depth = 0;
     var str = [];
     query = query.replace(/"(\\.|[^"\\])*"|'(\\.|[^'\\])*'|[\[\]]/g,function(t){
       depth += t == '[' ? 1 : t == ']' ? -1 : 0; // keep track of bracket depth
@@ -296,7 +294,7 @@ define({
     query.replace(/(\]|\)|push|pop|shift|splice|sort|reverse)\s*\(/,function(){
       throw new Error("Unsafe function call");
     });
-    
+
     query = query.replace(/([^<>=]=)([^=])/g,"$1=$2"). // change the equals to comparisons
       replace(/@|(\.\s*)?[a-zA-Z\$_]+(\s*:)?/g,function(t){
         return t.charAt(0) == '.' ? t : // leave .prop alone
@@ -348,7 +346,7 @@ define({
       return a == ']' ? ']' : str[a];
     });
     // create a function within this scope (so it can use expand and slice)
-    
+
     var executor = eval("1&&function($,$1,$2,$3,$4,$5,$6,$7,$8,$9){var $obj=$;return " + query + "}");
     for(var i = 0;i<arguments.length-1;i++){
       arguments[i] = arguments[i+1];

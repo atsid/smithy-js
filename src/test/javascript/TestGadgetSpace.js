@@ -11,15 +11,14 @@ require([
     GadgetFactory,
     MockViewFactory
 ) {
-    var b;
-
     /**
      * Test the primitive request methods.
      */
-    b = new TestCase("TestGadgetSpace", {
+    describe("TestGadgetSpace", function() {
 
-        setUp: function () {
-            this.gadgetSpace = new GadgetSpace({
+        var gadgetSpace;
+        beforeEach(function () {
+            gadgetSpace = new GadgetSpace({
                 viewFactory: new MockViewFactory(),
                 gadgetFactory: new GadgetFactory({
                     resolver: function (name) {
@@ -30,17 +29,17 @@ require([
                     url: ""
                 }
             });
-        },
+        });
 
         // Test simple create.
-        testSimpleGadgetLoading: function () {
+        it("testSimpleGadgetLoading", function () {
             var testArea;
-            assertNotUndefined(this.gadgetSpace);
-            this.gadgetSpace.addGadget("gadget", {});
-            this.gadgetSpace.loadGadgetTo("gadget", "windows[0]/center", true);
-            testArea = this.gadgetSpace.getArea("windows[0]");
-            assertNotUndefined(testArea);
-        }
+            expect(gadgetSpace).not.toBeUndefined();
+            gadgetSpace.addGadget("gadget", {});
+            gadgetSpace.loadGadgetTo("gadget", "windows[0]/center", true);
+            testArea = gadgetSpace.getArea("windows[0]");
+            expect(testArea).not.toBeUndefined();
+        });
     });
 
 });

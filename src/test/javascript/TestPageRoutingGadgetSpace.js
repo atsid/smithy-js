@@ -14,14 +14,12 @@ require([
     GadgetFactory,
     MockViewFactory
 ) {
-    var b;
-
     /**
      * Test the primitive request methods.
      */
-    b = new TestCase("TestPageRoutingGadgetSpace", {
+    describe("TestPageRoutingGadgetSpace", function() {
 
-        setUp: function () {
+        beforeEach(function () {
             var routingSpec = {
                 rootPattern: /slave/,
                 routes: {
@@ -38,7 +36,7 @@ require([
                     }
                 }
             };
-            this.gadgetSpace = new GadgetSpace({
+            var gadgetSpace = new GadgetSpace({
                 viewFactory: new MockViewFactory(),
                 usePageRouting: "url",
                 gadgetFactory: new GadgetFactory({
@@ -48,11 +46,10 @@ require([
                 }),
                 routingSpecification: routingSpec
             });
-        },
+        });
 
         // Test simple create.
-        testRoutingSpec: function () {
-        }
+        it("testRoutingSpec", function() {});
     });
 
 });
