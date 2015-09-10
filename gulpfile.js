@@ -1,7 +1,7 @@
 var gulp = require('gulp');
 
 var paths = {
-    scripts: ['src/main/**/*.js']
+    scripts: ['js/**/*.js']
 };
 
 /**
@@ -18,10 +18,12 @@ gulp.task('lint', function () {
     var jshint = require('gulp-jshint');
     return gulp.src(paths.scripts)
         .pipe(jshint())
-        .pipe(jshint.reporter('jshint-stylish'));
+        .pipe(jshint.reporter('jshint-stylish'))
+        .pipe(jshint.reporter('fail'));
 });
 
 gulp.task('scripts', function () {
+    var rename = require("gulp-rename");
     return gulp.src("src/main/fullpack.js")
         .pipe(require('gulp-requirejs-optimize')({
             baseUrl: "./src/main",
@@ -33,10 +35,13 @@ gulp.task('scripts', function () {
             },
             name: "smithy/fullpack"
         }))
-        .pipe(gulp.dest('dist'));
+        .pipe(rename("smithy.min.js"))
+        .pipe(gulp.dest('./'));
 });
 
-gulp.task('build', ['lint', 'test', 'scripts']);
+gulp.task('build', function (callback) {
+    require('run-sequence')('lint', 'test', 'scripts', callback);
+});
 
 // The default task (called when you run `gulp` from cli)
-// gulp.task('default', ['watch', 'scripts', 'images']);
+gulp.task('default', ['lint', 'test']);

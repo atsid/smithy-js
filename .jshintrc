@@ -1,14 +1,28 @@
 {
-    "es5":       true,
     "boss":      true,
     "node":      true,
     "strict":    true,
     "white":     true,
     "smarttabs": true,
-    "maxlen":    100,
-    "newcap":    false,
+    "maxlen":    1000,
+    "newcap":    true,
     "undef":     true,
-    "unused":    true,
+    "unused":    false,
     "onecase":   true,
-    "indent":    4
+    "indent":    4,
+    "globals": {
+        "define": true,
+        "require": true,
+        "dojo": true,
+        "window": true,
+        "it": true,
+        "describe": true,
+        "assert": true,
+        "beforeEach": true,
+        "before": true,
+        "afterEach": true,
+        "after": true,
+        "localStorage": true,
+        "sessionStorage": true
+    }
 }

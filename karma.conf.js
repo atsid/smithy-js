@@ -5,10 +5,9 @@ module.exports = function(config){
 
     // list of files / patterns to load in the browser
     files: [
-        {pattern: 'src/main/**/*.js', included: false},
-        {pattern: 'src/test/**/*.js', included: false},
-
-        'src/test/javascript/dev-test-config.js'
+        {pattern: 'js/**/*.js', included: false},
+        {pattern: 'test/**/*.js', included: false},
+        'test/test-main.js'
     ],
 
     // list of files to exclude
@@ -52,16 +51,8 @@ module.exports = function(config){
     // - PhantomJS
     // - IE (only Windows)
     browsers: [
-        'Chrome'
+        'PhantomJS'
     ],
-
-    // plugins: [
-    //     'karma-chrome-launcher',
-    //     'karma-firefox-launcher',
-    //     'karma-script-launcher',
-    //     'karma-requirejs',
-    //     'karma-jasmine'
-    // ],
 
     // If browser does not capture in given timeout [ms], kill it
     captureTimeout: 60000,
