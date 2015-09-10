@@ -24,9 +24,9 @@ gulp.task('lint', function () {
 
 gulp.task('scripts', function () {
     var rename = require("gulp-rename");
-    return gulp.src("src/main/fullpack.js")
+    return gulp.src("js/fullpack.js")
         .pipe(require('gulp-requirejs-optimize')({
-            baseUrl: "./src/main",
+            baseUrl: "./js",
             paths: {
                 smithy: ".",
                 dojo: "empty:",
