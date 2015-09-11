@@ -1,0 +1,42 @@
+{
+  "name": "smithy-js",
+  "version": "0.1.8",
+  "homepage": "http://atsid.github.io/",
+  "contributors": [
+    {
+      "name": "tom-servo"
+    },
+    {
+      "name": "natoverse"
+    },
+    {
+      "name": "bradmop"
+    },
+    {
+      "name": "Scott Smith"
+    },
+    {
+      "name": "stopyoukid"
+    }
+  ],
+  "description": "A library for building gadget-based applications",
+  "main": "smithy.min.js",
+  "keywords": [
+    "gadgets",
+    "schema",
+    "application",
+    "application",
+    "framework",
+    "bullhorn",
+    "circuits",
+    "schematic"
+  ],
+  "license": "Apache2.0",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

@@ -1,0 +1,7 @@
+languages:
+  JavaScript: true
+  
+exclude_paths:
+  - "js/declare.js"
+  - "js/JSONQuery.js"
+  - "js/md5.js"
