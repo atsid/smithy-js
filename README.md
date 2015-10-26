@@ -1,4 +1,8 @@
 [![Code Climate](https://codeclimate.com/github/atsid/smithy-js/badges/gpa.svg)](https://codeclimate.com/github/atsid/smithy-js)
+[![Build Status](https://travis-ci.org/atsid/smithy-js.svg?branch=master)](https://travis-ci.org/atsid/smithy-js)
+[![Dependency Status](https://david-dm.org/atsid/smithy-js.svg)](https://david-dm.org/atsid/smithy-js)
+[![Dev Dependency Status](https://david-dm.org/atsid/smithy-js/dev-status.svg)](https://david-dm.org/atsid/smithy-js)
+
 # smithy-js - A gadget-based application framework
 
 ## Overview
